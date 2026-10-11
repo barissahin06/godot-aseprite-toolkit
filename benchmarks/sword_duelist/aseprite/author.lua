@@ -1,6 +1,7 @@
 -- Original pixel clusters and explicit poses; no raster rotations or 3D renders.
 local root = assert(app.params.root)
 local destination = assert(app.params.output)
+local study = app.params.study == 'true'
 assert(not app.fs.isFile(destination), 'Refusing to overwrite an edited source')
 local input = assert(io.open(root..'/brief.json', 'r'))
 local brief = json.decode(input:read('*a')); input:close()
@@ -57,11 +58,29 @@ local function segment(a,b,width,shade,light)
   shape(width,'outline');shape(width-2,shade)
   if light then line(a[1]-nx,a[2]-ny,b[1]-nx,b[2]-ny,light) end
 end
-local function boot(ankle,direction,far)
+local function boot(ankle,direction,far,mode)
   local x,y=ankle[1],ankle[2]
-  polygon({{x-2,y-5},{x+2,y-5},{x+2,y-1},{x+5*direction,y},{x+5*direction,y+1},{x-2,y+1}},'outline')
-  polygon({{x-1,y-4},{x+1,y-4},{x+1,y-1},{x+3*direction,y},{x-1,y}}, far and 'dark' or 'bronze_shadow')
-  if not far then line(x,y-4,x+1,y-2,'bronze');line(x-1,y+1,x+4*direction,y+1,'neutral') end
+  if mode == 'heel' then
+    polygon({{x-2,y-5},{x+2,y-5},{x+2,y-2},{x+5,y-2},{x+5,y-1},{x-2,y+1}},'outline')
+  elseif mode == 'toe' then
+    polygon({{x-2,y-5},{x+2,y-4},{x+2,y-1},{x+5,y},{x+5,y+1},{x-2,y-1}},'outline')
+  else
+    polygon({{x-2,y-5},{x+2,y-5},{x+2,y-1},{x+5*direction,y},{x+5*direction,y+1},{x-2,y+1}},'outline')
+  end
+  local shade=far and 'dark' or 'bronze_shadow'
+  if mode=='heel' then
+    polygon({{x-1,y-4},{x+1,y-4},{x+1,y-2},{x+3,y-2},{x-1,y}},shade)
+  elseif mode=='toe' then
+    polygon({{x-1,y-4},{x+1,y-3},{x+1,y-1},{x+3,y},{x-1,y-2}},shade)
+  else
+    polygon({{x-1,y-4},{x+1,y-4},{x+1,y-1},{x+3*direction,y},{x-1,y}},shade)
+  end
+  if not far then
+    line(x,y-4,x+1,y-2,'bronze')
+    if mode=='heel' then line(x-1,y+1,x+4,y-1,'neutral')
+    elseif mode=='toe' then line(x-1,y-1,x+4,y+1,'neutral')
+    else line(x-1,y+1,x+4*direction,y+1,'neutral') end
+  end
 end
 local function legs(p,far)
   local dx,dy=p.dx or 0,p.dy or 0
@@ -74,10 +93,22 @@ local function legs(p,far)
     polygon({{knee[1]-2,knee[2]-2},{knee[1]+2,knee[2]-2},{knee[1]+2,knee[2]+1},{knee[1],knee[2]+3},{knee[1]-2,knee[2]+1}},'steel_shadow')
     line(knee[1],knee[2]-2,knee[1]+2,knee[2]-1,'steel')
   end
-  boot(ankle,1,far)
+  boot(ankle,1,far,far and p.bmode or p.fmode)
 end
 local function body(p)
   local dx,dy=p.dx or 0,p.dy or 0
+  if p.profile then
+    shifted({{40,31},{45,30},{49,33},{48,42},{47,49},{39,49},{38,39}},dx,dy,'outline')
+    shifted({{40,33},{44,32},{47,34},{46,43},{45,47},{40,47},{39,39}},dx,dy,'coat_shadow')
+    shifted({{44,35},{47,35},{46,42},{43,45},{42,39}},dx,dy,'coat')
+    shifted({{43,31},{46,32},{49,34},{47,40},{43,41},{41,36}},dx,dy,'steel_shadow')
+    shifted({{43,32},{46,33},{47,35},{46,39},{43,39},{42,36}},dx,dy,'steel')
+    line(44+dx,33+dy,46+dx,34+dy,'steel_light')
+    line(45+dx,34+dy,46+dx,35+dy,'highlight')
+    line(41+dx,42+dy,47+dx,44+dy,'coat_light')
+    line(40+dx,44+dy,47+dx,45+dy,'bronze')
+    pixel(45+dx,45+dy,'bronze_light')
+  else
   shifted({{39,31},{45,29},{51,33},{51,43},{49,49},{39,49},{36,40}},dx,dy,'outline')
   shifted({{39,33},{45,31},{49,33},{49,44},{47,47},{39,47},{38,39}},dx,dy,'coat_shadow')
   shifted({{43,34},{48,34},{48,43},{44,45},{43,40}},dx,dy,'coat')
@@ -88,6 +119,8 @@ local function body(p)
   line(41+dx,32+dy,45+dx,31+dy,'highlight');line(39+dx,37+dy,41+dx,40+dy,'bronze_shadow')
   line(40+dx,43+dy,48+dx,44+dy,'outline');line(40+dx,44+dy,48+dx,45+dy,'bronze')
   polygon({{44+dx,44+dy},{46+dx,44+dy},{46+dx,46+dy},{44+dx,46+dy}},'bronze_light')
+  end
+  dy=p.head_dy or dy
   -- Helmet profile with a dark visor and stepped jaw silhouette.
   shifted({{40,16},{46,16},{49,19},{50,22},{52,23},{50,25},{49,29},{43,30},{39,27},{38,21}},dx,dy,'outline')
   shifted({{41,17},{46,17},{48,20},{49,23},{49,26},{47,28},{42,28},{40,25},{39,21}},dx,dy,'steel_shadow')
@@ -158,6 +191,43 @@ local function walk(i)
   local sway=({0,1,2,2,1,0,-1,-2,-2,-1,0,0})[i]
   return {dx=0,dy=bob,fk=v[1],ff=v[2],bk=v[3],bf=v[4],e={54+sway,38+bob},h={54+sway,43+bob},tip={63+sway,18+bob},wave=({0,0,1,1,1,0,0,-1,-1,-1,0,0})[i],be={36-sway,40+bob},bh={40-sway,46+bob}}
 end
+-- Eight deliberately posed contact/down/passing/up keys, repeated on the other leg.
+local study_legs={
+  {{52,58},{56,68},{38,58},{32,68},'heel','toe'},
+  {{54,60},{50,68},{39,58},{33,65},'flat','air'},
+  {{46,58},{44,68},{47,55},{40,63},'flat','air'},
+  {{41,57},{38,68},{51,56},{51,65},'flat','air'},
+  {{38,58},{32,68},{52,58},{56,68},'toe','heel'},
+  {{39,58},{33,65},{52,60},{50,68},'air','flat'},
+  {{49,55},{40,63},{44,58},{44,68},'air','flat'},
+  {{53,56},{51,65},{39,57},{38,68},'air','flat'}
+}
+local function study_walk(i)
+  local v=study_legs[i]
+  local dy=({0,2,0,-2,0,2,0,-2})[i]
+  local h=({{54,44},{54,45},{55,43},{56,41},{57,42},{57,43},{56,43},{55,43}})[i]
+  local be=({{44,40},{45,42},{41,42},{36,39},{34,39},{34,41},{37,41},{41,39}})[i]
+  local bh=({{49,45},{50,45},{44,47},{34,45},{30,45},{32,47},{38,47},{45,43}})[i]
+  return {profile=true,dx=({0,0,-1,-1,0,0,1,1})[i],dy=dy,head_dy=dy/2,
+    fk=v[1],ff=v[2],bk=v[3],bf=v[4],fmode=v[5],bmode=v[6],
+    e={h[1],h[2]-5},h=h,tip={h[1]+9,h[2]-25},be=be,bh=bh,
+    wave=({0,1,1,0,0,-1,-1,0})[i]}
+end
+local function study_between(i,t)
+  local a,b=study_walk(i),study_walk(i%8+1)
+  local p={}
+  for name,value in pairs(a) do
+    if type(value)=='number' then p[name]=value+(b[name]-value)*t
+    elseif type(value)=='table' then p[name]={value[1]+(b[name][1]-value[1])*t,value[2]+(b[name][2]-value[2])*t}
+    else p[name]=value end
+  end
+  -- A push-off leaves contact immediately; a landing remains airborne until its key.
+  if t>0 then
+    if a.fmode=='toe' and b.fmode=='air' then p.fmode='air' end
+    if a.bmode=='toe' and b.bmode=='air' then p.bmode='air' end
+  end
+  return p
+end
 local attacks={
   {0,0,{53,35},{48,31},{36,9}}, {-1,1,{47,30},{40,28},{17,14}},
   {-2,1,{44,29},{39,27},{15,15}}, {1,0,{53,28},{54,24},{49,2}},
@@ -172,12 +242,24 @@ local function attack(i)
 end
 local count=0
 local ranges={}
-for _,clip in ipairs({'idle','walk','attack'}) do
+local contacts={}
+local subdivisions=study and (app.params.inbetweens=='true' and 3 or 1) or 1
+local study_durations={};for i=1,8*subdivisions do study_durations[i]=120/subdivisions end
+for _,clip in ipairs(study and {'walk'} or {'idle','walk','attack'}) do
   local first=count+1
-  for i,ms in ipairs(brief.clips[clip].durations_ms) do
+  for i,ms in ipairs(study and study_durations or brief.clips[clip].durations_ms) do
     count=count+1
     local frame=count==1 and spr.frames[1] or spr:newEmptyFrame();frame.duration=ms/1000
-    local p=clip=='idle' and idle(i) or (clip=='walk' and walk(i) or attack(i))
+    local phase=math.floor((i-1)/subdivisions)+1
+    local part=(i-1)%subdivisions
+    local p=study and study_between(phase,part/subdivisions) or (clip=='idle' and idle(i) or (clip=='walk' and walk(i) or attack(i)))
+    if study then
+      local points={}
+      for _,entry in ipairs({{'near',p.ff,p.fmode},{'far',p.bf,p.bmode}}) do
+        if entry[3]~='air' then points[#points+1]={foot=entry[1],mode=entry[3],pixel={math.floor(entry[2][1]+(entry[3]=='heel' and -2 or 5)+.5),math.floor(entry[2][2]+1.5)}} end
+      end
+      contacts[#contacts+1]={frame=i-1,duration_ms=ms,key=part==0,phase=({'contact','down','passing','up','contact','down','passing','up'})[phase],contacts=points}
+    end
     for layer_index,layer in ipairs(layers) do
       image=Image(96,80,ColorMode.RGB)
       if layer_index==1 then legs(p,true);arm(p,true)
@@ -199,5 +281,10 @@ local names={'outline','dark','neutral','steel_shadow','steel','steel_light','hi
 for i,name in ipairs(names) do palette:setColor(i,C[name]) end
 spr:setPalette(palette)
 local pivot=spr:newSlice(Rectangle(0,0,96,80));pivot.name='ground';pivot.pivot=Point(brief.anchor[1],brief.anchor[2])
+if study then
+  local motion={stride_pixels=48,cycle_seconds=.96,velocity_pixels_per_second=50,anchor={brief.anchor[1],brief.anchor[2]},poses=contacts}
+  spr.data=json.encode(motion)
+  if app.params.motion then local file=assert(io.open(app.params.motion,'w'));file:write(json.encode(motion));file:close() end
+end
 spr:saveAs(destination);spr:close()
 print('DUELIST_AUTHORED '..count)

@@ -69,6 +69,23 @@ class ToolkitTests(unittest.TestCase):
             entry=json.loads((destination/'source-manifest.json').read_text())['files'][0]
             self.assertEqual(entry['sha256'],hashlib.sha256(content).hexdigest())
 
+    def test_upstream_commit_replaces_import_provenance_without_losing_it(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)/'source'
+            root.mkdir()
+            source=root/'README.md'
+            source.write_text('source')
+            imported={'source_repository':'barissahin06/PixelSpark','source_commit':'import-sha'}
+            (root/'source-manifest.json').write_text(json.dumps(imported))
+            destination=Path(folder)/'package'
+            with patch.object(toolkit,'BASE',root), patch.object(toolkit,'distribution_files',return_value={source:Path('README.md')}), patch.object(toolkit,'run',side_effect=['toolkit-sha','https://github.com/barissahin06/godot-aseprite-toolkit.git',' M README.md']):
+                toolkit.package(type('Args',(),{'output':str(destination)})())
+            manifest=json.loads((destination/'source-manifest.json').read_text())
+            self.assertEqual(manifest['source_repository'],'barissahin06/godot-aseprite-toolkit')
+            self.assertEqual(manifest['source_commit'],'toolkit-sha')
+            self.assertEqual(manifest['imported_from'],imported)
+            self.assertTrue(manifest['source_tree_dirty'])
+
 
 if __name__ == '__main__':
     unittest.main()

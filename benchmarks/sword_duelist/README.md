@@ -48,3 +48,29 @@ game assets. Pause the Blender route. The next experiment should focus on a full
 side-view Aseprite walk: strong contact/down/passing/up poses on both legs, weight
 transfer, stable planted feet in a moving-ground test and restrained secondary motion.
 Review the silhouettes before adding finish or more intermediate frames.
+
+## Controlled walk refinement
+
+The separate `aseprite/walk_study.aseprite` keeps the first comparison intact. It has
+eight drawn side-view contact/down/passing/up keys and sixteen intermediate frames.
+The head is steadier than the torso, the free arm counters the legs, and heel contact
+and toe push-off have different boot silhouettes. The source is 25 fps with a
+0.96-second cycle. All five original editing layers remain separate.
+
+```powershell
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/walk_study.py
+```
+
+This builds and reviews the source without redrawing it. `--redraw` checkpoints and
+recreates only this study and its `walk_motion.json` contacts. That JSON and Aseprite
+user data hold the declared contact pixels; they are not inferred from a bounding box.
+Tests reject transparent contact pixels and moving planted anchors across the loop.
+The Godot scene shows native/nearest sizes, moving ground and a moving character.
+Its root motion advances two native pixels per authored 40 ms frame, totaling
+48 pixels per stride. The capture is 30 fps; it repeats frames rather than blending
+pixels. The world preview resets its path when the captured GIF repeats.
+
+Review: `generated/benchmarks/sword_duelist/walk-study/review/index.html`.
+Contact metrics validate the explicit authored model, not gait quality or integration
+with a game's movement controller. This refinement still requires visual acceptance;
+the general MCP drawing API and PixelSpark assets are not changed by the study.

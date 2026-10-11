@@ -60,6 +60,8 @@ Native acceptance uses temporary copies, Unicode/spaces and real MCP/app calls. 
 contracts and actual wheels. Aseprite native acceptance needs the licensed local app;
 Linux/macOS native behavior is unverified. The destination must be empty and separate.
 Only named packages, authored examples, tests, setup/docs and CI are copied. source-manifest.json
-records each SHA-256 and initial import provenance. Commit sources before distribution.
+records each SHA-256 and the current upstream commit; initial import provenance is
+kept separately in `imported_from`. A dirty source tree is explicitly marked.
+Repackaging without Git preserves the recorded provenance. Commit sources before distribution.
 Develop here; a PixelSpark consumer updater is a separate release step. Do not copy
 the toolkit's root config, CI or benchmark project over a game's files.

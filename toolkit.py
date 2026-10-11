@@ -181,13 +181,28 @@ def package(args) -> dict:
         commit = run(['git','rev-parse','HEAD'],BASE)
     except RuntimeError:
         commit = None
-    manifest = {"version":"0.2.0","source_repository":"barissahin06/PixelSpark","source_commit":commit,"files":entries}
+    manifest = {"version":"0.2.0","source_repository":None,"source_commit":commit,"files":entries}
     previous_manifest = BASE/'source-manifest.json'
+    provenance = {}
     if previous_manifest.is_file():
         provenance = json.loads(previous_manifest.read_text(encoding='utf-8'))
-        manifest.update({key:provenance[key] for key in ('source_repository','source_commit')})
+    if commit:
+        try:
+            origin = run(['git','remote','get-url','origin'],BASE)
+        except RuntimeError:
+            origin = ''
+        identity = re.search(r'github\.com[:/]([^/:\s]+/[^/\s]+?)(?:\.git)?$',origin)
+        manifest['source_repository'] = identity[1] if identity else 'local'
+        manifest['source_tree_dirty'] = bool(run(['git','status','--porcelain','--untracked-files=normal'],BASE))
+        imported = provenance.get('imported_from')
+        if not imported and provenance.get('source_repository') != manifest['source_repository'] and provenance.get('source_commit'):
+            imported = {key:provenance[key] for key in ('source_repository','source_commit')}
+        if imported:
+            manifest['imported_from'] = imported
+    elif provenance:
+        manifest.update({key:provenance[key] for key in ('source_repository','source_commit','source_tree_dirty','imported_from') if key in provenance})
     (destination/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n', encoding='utf-8')
-    return {"ok":True,"output":str(destination),"files":len(entries),"source_commit":commit}
+    return {"ok":True,"output":str(destination),"files":len(entries),"source_commit":manifest['source_commit']}
 
 
 def main() -> None:

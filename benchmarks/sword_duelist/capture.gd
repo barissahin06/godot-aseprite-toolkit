@@ -7,13 +7,14 @@ func _initialize() -> void:
 
 func capture() -> void:
 	var args := OS.get_cmdline_user_args()
-	assert(args.size() == 2)
+	assert(args.size() == 2 or args.size() == 3)
 	var output: String = args[0]
 	var count: int = int(args[1])
 	assert(count > 0 and count <= 300)
 	root.size = Vector2i(640, 360)
 	root.content_scale_size = root.size
-	var packed := load("res://compare.tscn") as PackedScene
+	var scene: String = args[2] if args.size() == 3 else "res://compare.tscn"
+	var packed := load(scene) as PackedScene
 	assert(packed != null)
 	for light: bool in [false, true]:
 		for mirrored: bool in [false, true]:
