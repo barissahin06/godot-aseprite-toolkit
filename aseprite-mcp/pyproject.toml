@@ -1,0 +1,26 @@
+[project]
+name = "aseprite-mcp"
+version = "0.2.0"
+description = "Native Aseprite authoring, inspection and reversible pixel-art tools"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mcp[cli]==1.30.0",
+    "pillow>=10.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=80.9,<81"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+aseprite-mcp = "aseprite_mcp.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["aseprite_mcp*"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]

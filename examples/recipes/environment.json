@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "asset_id": "example_environment",
+  "kind": "layered_scene",
+  "source": "examples/sources/environment.aseprite",
+  "output": "examples/project/environment",
+  "layers": [
+    { "name": "back", "z_index": 0 },
+    { "name": "banner", "z_index": 1 }
+  ]
+}

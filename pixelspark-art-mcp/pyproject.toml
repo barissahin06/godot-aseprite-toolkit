@@ -1,0 +1,22 @@
+[project]
+name = "pixelspark-art-mcp"
+version = "0.2.0"
+description = "Aseprite to Godot Skeleton2D authoring, validation and preview tools"
+requires-python = ">=3.13"
+dependencies = ["mcp[cli]==1.30.0", "aseprite-mcp==0.2.0", "pillow==12.3.0"]
+
+[build-system]
+requires = ["setuptools>=80.9,<81"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+aseprite-godot-art = "pixelspark_art_mcp.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["pixelspark_art_mcp*"]
+
+[tool.setuptools.package-data]
+pixelspark_art_mcp = ["*.gd", "*.lua"]
+
+[tool.uv.sources]
+aseprite-mcp = { path = "../aseprite-mcp" }

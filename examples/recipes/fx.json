@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "asset_id": "example_fx",
+  "kind": "sprite",
+  "source": "examples/sources/fx.aseprite",
+  "output": "examples/project/fx",
+  "palette": ["#E1A640", "#EFDDAA"]
+}

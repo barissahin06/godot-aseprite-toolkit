@@ -1,0 +1,607 @@
+{
+  "version": "0.2.0",
+  "source_repository": "barissahin06/PixelSpark",
+  "source_commit": "ee447d4841ed8c5f29f440abc24c27dd547f4acf",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "330b80cd1b37760065f3705c0642425d1ad9dc101ea04b529adcb97f3f589e18",
+      "source_sha256": "5df8edb8574f570971af1be8f0ac5d618ca2a11324b8ec2fc2083e1d7f802973",
+      "bytes": 1071
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/__init__.py",
+      "sha256": "f3f3c554e30bf4e0baf43f978bcba4e2005d47d00cc419e2d9f22e9ae99a062d",
+      "source_sha256": "7a75ec25035c4cf2b41aee9e34185a03bd8706b7699a1a14a780f08fe1519d77",
+      "bytes": 796
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/__main__.py",
+      "sha256": "14bfa3a081634d45289b101350683bcc81ec88c0a0e6f324b3456ee3dfc8e91e",
+      "source_sha256": "416540c4fe8c0feabc195a551ca312d6e0b28f2f71d7cd09d8bf342914e69c6c",
+      "bytes": 122
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/__init__.py",
+      "sha256": "c14fed4c90f464ba9325a082c7a8879454a1b3bd1a715028ae3b59739f5384e3",
+      "source_sha256": "c14fed4c90f464ba9325a082c7a8879454a1b3bd1a715028ae3b59739f5384e3",
+      "bytes": 78
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/colors.py",
+      "sha256": "c6840e6e40dbfb720a5a29bd551fee0f1b5467f19d3635da415f81a4caa9f13d",
+      "source_sha256": "61f2ad2d78f7dbb20061e31c72efd1976d924cd1a83bc886a7139aaa5c694e38",
+      "bytes": 874
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/commands.py",
+      "sha256": "f27ef38e8fc000c61fc19f5a2ba5bcca29047f30e6293cf99b5327fee58005b0",
+      "source_sha256": "da7b26ea2b5baec5e56175e7e121ab36a4efd0e9f64a7d72be7514c66141c821",
+      "bytes": 4887
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/fonts.py",
+      "sha256": "4068a5f697e9a430261ca21e6361a04f6521104884e034a0f50282738a424c58",
+      "source_sha256": "20de6c34dbdde8d0b2e8397cb527ee774886e80f150460aaf0266f088a669db6",
+      "bytes": 15936
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/lua.py",
+      "sha256": "968426ca5bfb0d0f80cd796052aec2a07fe5c78a41460340b3ce5d3edebbde3d",
+      "source_sha256": "a16ec4339cbe7de4f479e122f4b62dd4b8f341b50e086918347148e1a77c4d3c",
+      "bytes": 4579
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/native.py",
+      "sha256": "db49191d9cf83da62d245ae7f391967e8f8905bfbbdfdeebefcf3a456b122c0f",
+      "source_sha256": "fef994774d39f4cf5f5cfdd8793c83a7e5bdf96f73abd70303c63defc3d784ec",
+      "bytes": 2000
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/core/runtime.py",
+      "sha256": "982d947288c30b9674d551263914bff574c4a44e0e6022a5c3d9b35bf1f65931",
+      "source_sha256": "982d947288c30b9674d551263914bff574c4a44e0e6022a5c3d9b35bf1f65931",
+      "bytes": 7796
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/server.py",
+      "sha256": "98fa1ceb11755f67680e143f6e45111d87f2a945fb1c135612cfb36d86bd6fed",
+      "source_sha256": "98fa1ceb11755f67680e143f6e45111d87f2a945fb1c135612cfb36d86bd6fed",
+      "bytes": 652
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/__init__.py",
+      "sha256": "4f88fdbcf692c784e97acfa3fe6fc48e6ec64b857b58e450d9a8cbf610c90ffd",
+      "source_sha256": "8dd326b117d4dcab8a2a0a6be3a76dbd66b73ebf50da07c8da2c6e8beb07d909",
+      "bytes": 435
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/analysis.py",
+      "sha256": "bbf12c233dc73d9f489ba5fd6ee63268b584fb6e2945016fdaca5830ea2f23d1",
+      "source_sha256": "6bf539abc3a1085fae42add7bd7359724b4272811a56ed13a63b808833d5e0b4",
+      "bytes": 10278
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/animation.py",
+      "sha256": "d5521ee6ea84d56822703ac35d07b35a31bf0a3be582ee26c65ea2854f326f49",
+      "source_sha256": "2a719f64e544052a9ad50e6b277c014ac81b028931561f2fcd6651defbcc48d7",
+      "bytes": 48474
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/canvas.py",
+      "sha256": "4f3d1c75e1fbacd22f4bf65e4a398556a44e774447a85f6284cb1492e9a8ea70",
+      "source_sha256": "bbcfc48f9c4d3846f645d12bfac03557ac84b8176e5928eb41f903e770f513ab",
+      "bytes": 8061
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/drawing.py",
+      "sha256": "ad8153086ce7979d40ad89e23b611c1e19d733a4e558a4d39657426968934945",
+      "source_sha256": "973a74f6aa70cadd04819a53e72a9cddb2f050560e0f8525068a795ad89e0f91",
+      "bytes": 37750
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/export.py",
+      "sha256": "5dd1d773cb96c1a1a05a499a0e10fd0a3956cf59474d33438c33ce06ceec328b",
+      "source_sha256": "a1a4bb740973d656c57bee9ffdde9646369a2c6a38f5ed2829f7dfb89013403a",
+      "bytes": 14344
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/fx.py",
+      "sha256": "ca32807ca988170f709b8e795671321d7bc4af856113fe552797afc4c0db14c9",
+      "source_sha256": "2bf5a540518daddf4ed8c7c844f4990f131906f8972103eb3bf3e2748dbe5930",
+      "bytes": 15651
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/guide.py",
+      "sha256": "dc28b705009eaa44c12d06ecc312fa998d157e037844404abd4ac6dad47a820e",
+      "source_sha256": "7cf870a45dec678b3e022e6ab821ed69306b5872f15625dd020e4c05341947c7",
+      "bytes": 2292
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/layers.py",
+      "sha256": "0a6c7ebf3ec4f538649c4c23ceee8739128ca6db6d2e670bf742ffddc61b4ab1",
+      "source_sha256": "df8255660f8f96fa86b0caaf94c46cf63b987bfde0c1e01fe3a214d37527ef1c",
+      "bytes": 9664
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/native_fx.py",
+      "sha256": "748fdae4226ae5a22f6207bb9bd5b210b91d884a82db93d933ff4285e0772ba7",
+      "source_sha256": "a30df4716296ff699fc1019fccace94bb6c94972763b09d8567f12d302c75a7a",
+      "bytes": 10287
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/palette.py",
+      "sha256": "661d69f88988438ee85bbf1ae0b398713e5d7b2241e45d349c0abba0972eec56",
+      "source_sha256": "31e586441dd25a80dde6adc7a5614ba0d6a6606a68ae132042dc283abb88aec5",
+      "bytes": 16475
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/pixel_read.py",
+      "sha256": "232686a8f7ba780af07c6e509da41bf9c0d03801bb4d73cf40a1092f5e4f4d34",
+      "source_sha256": "28d4aa311c68650ee065856e3fd3b8d4ffaf8d565c5b9fc79a5fd66c363f286e",
+      "bytes": 9942
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/preview.py",
+      "sha256": "0a23331083db604f1f412751dc21c69400702ebf50d91087ec7397769dcd6b34",
+      "source_sha256": "cfb3fc856d1d6093792575d4e19596c8b5ed63dc1b51ca0a5f9fade2ed88b54f",
+      "bytes": 2584
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/quality.py",
+      "sha256": "cbfc8fa01920085bc9226c7ea4d1fc2597032291c6b6033508a08cca2a2f7c20",
+      "source_sha256": "54f8bebda152a8b2081a22b38e49b3e633ef8f7c33ba28bd05b2c403909d6c20",
+      "bytes": 33342
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/scene.py",
+      "sha256": "ee3b266c17da88c8350e67bdcd6b63cadbca1dc6b6385e962fb2487db0c3e1ba",
+      "source_sha256": "d234a0d7f45ded4506b73e32b6bceda1c04af56b500904ea6053a6f1815edb84",
+      "bytes": 4090
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/script.py",
+      "sha256": "233d639d150cc77d99054fefed5be1ee1e3eb700c540af3175ffd016ee358716",
+      "source_sha256": "7f9fdc618288fae48cc63d44d05e41141a8158ba9e8ac9fc12d11e2b1732698b",
+      "bytes": 1588
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/selection.py",
+      "sha256": "e3a84f544c86b4f28b21c04af6001e72a472757a57bcaab1c8a98ee1b189dac7",
+      "source_sha256": "a191f29bab8f7f940f7ebb740fbd0c27842f693bfca86076cfd04ae214cf66dd",
+      "bytes": 11225
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/slices.py",
+      "sha256": "2850ef675a7e5a27783a27332d565b33ae578259e46945a98c6b97465a88b8e4",
+      "source_sha256": "89a7033b7874d8d644b8934a64b820eb1d716a035b011e0ed75a0d7d0a7d73ba",
+      "bytes": 6682
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/text.py",
+      "sha256": "51aec9b9cbfb96da07d997e8c60cf65ba9b7f64ab98fb8a8e1bd1777552d8161",
+      "source_sha256": "bbc9efda2d990477777a655d510f99d791a7dfc11c1554add7e882b05115ed73",
+      "bytes": 10358
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/tilemap.py",
+      "sha256": "a687fb625c57a23ffb1ad06971845ae80839cfba2ad650eb5726add7814b1925",
+      "source_sha256": "23a354b0534e6a68a752b9169508346b6e36bc6f27ef50883cad6b2a30581e44",
+      "bytes": 12122
+    },
+    {
+      "path": "aseprite-mcp/aseprite_mcp/tools/transform.py",
+      "sha256": "7aa2bd5affd4b0dd262febc52198517d6f33cc309e19c1107a5d6106e9414097",
+      "source_sha256": "5f21604d18422966bec955f62be728e0c26b5c402b47766fc5b1c2e53da35e5c",
+      "bytes": 7279
+    },
+    {
+      "path": "aseprite-mcp/LICENSE",
+      "sha256": "3e79238e7c405bcdf55f5f4b1bc8998e68cd4612fcfabf45a7b85e856e5b9ab8",
+      "source_sha256": "bef9cc45cf205b600c08622d5b18693d50c3e011b18eeebae7b86d24bd6ae969",
+      "bytes": 1071
+    },
+    {
+      "path": "aseprite-mcp/MANIFEST.in",
+      "sha256": "d6d9f316a229042f3cd5558b637a2359919ff501398278dc777925e4ab1cc744",
+      "source_sha256": "d6d9f316a229042f3cd5558b637a2359919ff501398278dc777925e4ab1cc744",
+      "bytes": 63
+    },
+    {
+      "path": "aseprite-mcp/pyproject.toml",
+      "sha256": "e80d4443d346b456ff4dbb0c2c6b6b06d49a8100bd0dcfb40c6e6a6361645427",
+      "source_sha256": "a1fc5a5c7313f361d34fa3781b339d05e7714af8f77d9b03a4e2c46af4226bfc",
+      "bytes": 544
+    },
+    {
+      "path": "aseprite-mcp/README.md",
+      "sha256": "9b75fff60dc4856516fbcd0632793035ec9a73e03991dcfda3a07e60da42b9d1",
+      "source_sha256": "9b75fff60dc4856516fbcd0632793035ec9a73e03991dcfda3a07e60da42b9d1",
+      "bytes": 14819
+    },
+    {
+      "path": "aseprite-mcp/tests/conftest.py",
+      "sha256": "38f1901b1caea2f9bc505e05add72728067b07e3b921f92ca1b3c8c46b824851",
+      "source_sha256": "d9875c3d5766dafb9ec913647affaceba2819599981c2ccedb50958f39743675",
+      "bytes": 1620
+    },
+    {
+      "path": "aseprite-mcp/tests/test_analysis.py",
+      "sha256": "b52489f3d5815ee36c1485a12e4bef2ac6d2c5c6eb9b5e1e348bc68db236cc54",
+      "source_sha256": "ed015b9ad8963c06245e53f0b856528b78c8d8f8b43a02b7cd36a306064e7d1b",
+      "bytes": 1258
+    },
+    {
+      "path": "aseprite-mcp/tests/test_animation.py",
+      "sha256": "7d333b749809adaa046f652fccac8be369530572cc7f50f79fe6f285bc113c03",
+      "source_sha256": "2c6d32674a2ab3789403093020d9be7087e2b901bf2666de1636f3ba7d32d87f",
+      "bytes": 961
+    },
+    {
+      "path": "aseprite-mcp/tests/test_composite_read.py",
+      "sha256": "ccb637afea6dc6b18c161f71a67b7e9dd38d89b5fc0c6b1298e57f7b8e96e8aa",
+      "source_sha256": "138ff81261c638b1519497286885d40bca1e8508de2c06f737d30e02426bba3c",
+      "bytes": 1336
+    },
+    {
+      "path": "aseprite-mcp/tests/test_create_into_group.py",
+      "sha256": "99de74643b3ec674a53744a0d0d5f0a2a0110e59d0068437a8ed56e4adb2a9ab",
+      "source_sha256": "0325dfaace47817717e56f0e3273095ef34ac9943a3da158c8f2696a2c184e7e",
+      "bytes": 2873
+    },
+    {
+      "path": "aseprite-mcp/tests/test_drawing.py",
+      "sha256": "1f44f33fd2964cea3d66e72f58e118f00bc57e403cd5a508b6b1fc9fa7264490",
+      "source_sha256": "f8f16cfba89d2fc0d3971f63bc959a3e52382b8f2ec1c96eac0bce1a201daa54",
+      "bytes": 530
+    },
+    {
+      "path": "aseprite-mcp/tests/test_drawing_fixes.py",
+      "sha256": "a4c35def44171419eb0763fa1a906851d33f07e8e3b034fb47e3b42c72f50287",
+      "source_sha256": "415106afd29dc4ac9cc6e45d4706d866a5aaae40ef22a8f6ee6a50c700f38766",
+      "bytes": 2529
+    },
+    {
+      "path": "aseprite-mcp/tests/test_error_propagation.py",
+      "sha256": "ee03931ad10fdaf5b524f7e30a763c84ccd6c3d1b1eb4523e457b0b8ef3c331d",
+      "source_sha256": "ee03931ad10fdaf5b524f7e30a763c84ccd6c3d1b1eb4523e457b0b8ef3c331d",
+      "bytes": 3565
+    },
+    {
+      "path": "aseprite-mcp/tests/test_export.py",
+      "sha256": "9de60d63b87be05c096ed6479ed6eb37c3eb4131ca8b1256c4a575101e1993af",
+      "source_sha256": "883e9623274c9bde7fe4c48b35e0b234d9d341d92cf05fd172bdafe11df82d94",
+      "bytes": 1484
+    },
+    {
+      "path": "aseprite-mcp/tests/test_fx.py",
+      "sha256": "9df85634924167660f5804add6f01dfa421f1879194155d0ab934a773790f6ac",
+      "source_sha256": "a4e161bcf2c4a1e653d334b0519a777c8d9576d55a7b184954f9bbd87bfe8abe",
+      "bytes": 950
+    },
+    {
+      "path": "aseprite-mcp/tests/test_group_layers.py",
+      "sha256": "e9e6fbcd04896e52ccdf610f37ec61a43e46615a8e5612fd9ac47fed2f309f96",
+      "source_sha256": "f51aaf516838d5b2b8741b22ccc86455ccf2178be064129594f19c4facc997b7",
+      "bytes": 5062
+    },
+    {
+      "path": "aseprite-mcp/tests/test_layers.py",
+      "sha256": "9fbe0089467bc79b40b03d233fb82d232084135a1d919a26b3949fdc4ca9b078",
+      "source_sha256": "d4a037b7f99c0714a34b0cac94e7b0c9a62220ac418303d7fac78d54869c064c",
+      "bytes": 1137
+    },
+    {
+      "path": "aseprite-mcp/tests/test_native_fx.py",
+      "sha256": "c3f1f5e77c7084d3856b26b1328f50d7e2ec21a0823187ccc4e593ecef93c459",
+      "source_sha256": "dac711c85259f0359da1cdaaa2297ffa7b44d9198170cbd32787ae4688ec02fa",
+      "bytes": 2374
+    },
+    {
+      "path": "aseprite-mcp/tests/test_palette.py",
+      "sha256": "4f866d22f5a284da6479cdc910f4e4ad79fcc50731c3e7bd0c5b3f04228fb8a5",
+      "source_sha256": "d0406bf5a0af292c507653c36210d78ade9608f30dda79561643e168cbe0d75c",
+      "bytes": 1084
+    },
+    {
+      "path": "aseprite-mcp/tests/test_script.py",
+      "sha256": "32761c8d017d61f98873e60772d0a8b951433a32654b35ab4d8e9e03b18a458c",
+      "source_sha256": "dd5dc4855188dbd1ff9ef29d6dc52b416321f5b1442c3dc251833cda0676b8f1",
+      "bytes": 455
+    },
+    {
+      "path": "aseprite-mcp/tests/test_selection.py",
+      "sha256": "ac7eeb6e1205346a17e9431f63b64d96ae9c217d7e700dc425769d77da8211ef",
+      "source_sha256": "f26ac5c68e849802f068a74e2a5986873d1149a50b3bb7250e4e503e21eafc3f",
+      "bytes": 567
+    },
+    {
+      "path": "aseprite-mcp/tests/test_slices.py",
+      "sha256": "a1c7697aeb0fa303208d9f2759e5774d2470eb161f61f7a669cc572831b1e2a3",
+      "source_sha256": "6a0a9fc8ba35bc7d3b437ba7d71085412380fb68f0be0c0433762f37990208cc",
+      "bytes": 941
+    },
+    {
+      "path": "aseprite-mcp/tests/test_slices_pipe.py",
+      "sha256": "50e5487facabc04e259532d53f17b98a8b7de2ed1cce3bbdd377f9b681795c8f",
+      "source_sha256": "9a8c46f0562cb78fa3e2d3dac08ccbce766208ae0e8a3deb746add334e0de310",
+      "bytes": 721
+    },
+    {
+      "path": "aseprite-mcp/tests/test_sprite_info_groups.py",
+      "sha256": "ee9fe5e966fe976ffb5131aa5553b6f49ca4ab0a069ba753e879ce79000f8947",
+      "source_sha256": "ae8cb9506091fc412f3bd38e5d78d82db3befedf14a5a7224e64e5fbe22ef372",
+      "bytes": 732
+    },
+    {
+      "path": "aseprite-mcp/tests/test_text.py",
+      "sha256": "d7bef5dbe3a7e612b2aa22a944d3c3ef854d1bb4201798619a0048142cca38ea",
+      "source_sha256": "04122da44139ba71159d3cd2a119caa0f506392e873bbd760b0f229a5e685032",
+      "bytes": 7813
+    },
+    {
+      "path": "aseprite-mcp/tests/test_tilemap.py",
+      "sha256": "4ca7e2161c13a720873c57b3274677383a86d616b7c8229d522e51d4e3a45451",
+      "source_sha256": "0be84d74efa898e27a440d5d2f8b27553a56872c94022a988dbdc19aef7c501b",
+      "bytes": 1377
+    },
+    {
+      "path": "aseprite-mcp/uv.lock",
+      "sha256": "8ebdd9af92097db9e1eea14d60915894a33331346d63253f0459546ccd042663",
+      "source_sha256": "8ebdd9af92097db9e1eea14d60915894a33331346d63253f0459546ccd042663",
+      "bytes": 149887
+    },
+    {
+      "path": "examples/author.lua",
+      "sha256": "179ae1541705e8f1ba6abe2ce5e72fef686ef8b783f34200f38d5101a637e10d",
+      "source_sha256": "179ae1541705e8f1ba6abe2ce5e72fef686ef8b783f34200f38d5101a637e10d",
+      "bytes": 2496
+    },
+    {
+      "path": "examples/author_motion.gd",
+      "sha256": "4474e7887e9eee450c1ff0a16098a17b6f6dad18906ba5795a03429eba904835",
+      "source_sha256": "4474e7887e9eee450c1ff0a16098a17b6f6dad18906ba5795a03429eba904835",
+      "bytes": 916
+    },
+    {
+      "path": "examples/project/.gitignore",
+      "sha256": "7d89658e6e8b36cc76d8dc7ef807cd6595abd0ba0b6b8e3e07b33babcdb1b124",
+      "source_sha256": "7d89658e6e8b36cc76d8dc7ef807cd6595abd0ba0b6b8e3e07b33babcdb1b124",
+      "bytes": 53
+    },
+    {
+      "path": "examples/project/project.godot",
+      "sha256": "368a7c253e676114538f798cea1cb195bc90f6f19620d36fefb347a6d37908fa",
+      "source_sha256": "368a7c253e676114538f798cea1cb195bc90f6f19620d36fefb347a6d37908fa",
+      "bytes": 268
+    },
+    {
+      "path": "examples/project/rig/motion.tres",
+      "sha256": "21f62513611439ad49672ee97e53e4c2e7d0a478d6985d8cb2e79bb0a2b99680",
+      "source_sha256": "21f62513611439ad49672ee97e53e4c2e7d0a478d6985d8cb2e79bb0a2b99680",
+      "bytes": 1257
+    },
+    {
+      "path": "examples/README.md",
+      "sha256": "1662cbd65b8d628e8105825a693da06501fb8cd49de51658219ced6a6904cdce",
+      "source_sha256": "1662cbd65b8d628e8105825a693da06501fb8cd49de51658219ced6a6904cdce",
+      "bytes": 538
+    },
+    {
+      "path": "examples/recipes/environment.json",
+      "sha256": "022856d8cf75f854e8e7ac342741352ddd3e636d3e5859f727f3b7c7715cdfbe",
+      "source_sha256": "022856d8cf75f854e8e7ac342741352ddd3e636d3e5859f727f3b7c7715cdfbe",
+      "bytes": 276
+    },
+    {
+      "path": "examples/recipes/fx.json",
+      "sha256": "7ea986cce26cc76fb189eb2fd0e5a0f70ecc35761d8ad91008877a503879ce98",
+      "source_sha256": "7ea986cce26cc76fb189eb2fd0e5a0f70ecc35761d8ad91008877a503879ce98",
+      "bytes": 183
+    },
+    {
+      "path": "examples/recipes/rig.json",
+      "sha256": "5a4ccf1b144285ea6559971eca880bbc2ccc0c0cbeddddb2f93e2db26980e9c8",
+      "source_sha256": "5a4ccf1b144285ea6559971eca880bbc2ccc0c0cbeddddb2f93e2db26980e9c8",
+      "bytes": 526
+    },
+    {
+      "path": "examples/recipes/ui.json",
+      "sha256": "c91d47aee61bcf51bb30668f0725bd9a49d5ab4b6f1aaeb7437d7cd8f79f3a75",
+      "source_sha256": "c91d47aee61bcf51bb30668f0725bd9a49d5ab4b6f1aaeb7437d7cd8f79f3a75",
+      "bytes": 175
+    },
+    {
+      "path": "examples/sources/environment.aseprite",
+      "sha256": "7a04e6f3417c1349571237df55055d5de39be887b01d5d0a72c336dcf3fda87f",
+      "source_sha256": "7a04e6f3417c1349571237df55055d5de39be887b01d5d0a72c336dcf3fda87f",
+      "bytes": 1543
+    },
+    {
+      "path": "examples/sources/fx.aseprite",
+      "sha256": "f66225ba554e36a405629be66fc7a700bbc62cf610704999650d650954bcaf1d",
+      "source_sha256": "f66225ba554e36a405629be66fc7a700bbc62cf610704999650d650954bcaf1d",
+      "bytes": 1308
+    },
+    {
+      "path": "examples/sources/rig.aseprite",
+      "sha256": "1ffdd0ba1277cdf46439783227a22296af6b5ecd21dcc827943893f3c10fdb2f",
+      "source_sha256": "1ffdd0ba1277cdf46439783227a22296af6b5ecd21dcc827943893f3c10fdb2f",
+      "bytes": 1736
+    },
+    {
+      "path": "examples/sources/ui.aseprite",
+      "sha256": "cc588261e6b0d29210289b028aaed04c5e1d7e95427661eea4e2e891b4f02b2f",
+      "source_sha256": "cc588261e6b0d29210289b028aaed04c5e1d7e95427661eea4e2e891b4f02b2f",
+      "bytes": 1350
+    },
+    {
+      "path": "pixelspark-art-mcp/LICENSE",
+      "sha256": "330b80cd1b37760065f3705c0642425d1ad9dc101ea04b529adcb97f3f589e18",
+      "source_sha256": "5df8edb8574f570971af1be8f0ac5d618ca2a11324b8ec2fc2083e1d7f802973",
+      "bytes": 1071
+    },
+    {
+      "path": "pixelspark-art-mcp/MANIFEST.in",
+      "sha256": "4ff4f153ae7f3c7bee04da61f4992ec3dd4224a247171d29b7ba2f3157199649",
+      "source_sha256": "4ff4f153ae7f3c7bee04da61f4992ec3dd4224a247171d29b7ba2f3157199649",
+      "bytes": 111
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/__init__.py",
+      "sha256": "ed05b0c2b2ac1db3b5fe46e4fb9f36ad2644a7cfa7cd4d13ceed6a4522407d17",
+      "source_sha256": "ed05b0c2b2ac1db3b5fe46e4fb9f36ad2644a7cfa7cd4d13ceed6a4522407d17",
+      "bytes": 60
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/__main__.py",
+      "sha256": "ecc5cd10c63ad39f2720f01172235cdf35187626ea22fc714c5d492dc452cba7",
+      "source_sha256": "ecc5cd10c63ad39f2720f01172235cdf35187626ea22fc714c5d492dc452cba7",
+      "bytes": 9990
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/aseprite.py",
+      "sha256": "7ed9b26fc251d7f691cd25057238d5a8c669b7cc4274e8576b5683b28da2b8da",
+      "source_sha256": "7ed9b26fc251d7f691cd25057238d5a8c669b7cc4274e8576b5683b28da2b8da",
+      "bytes": 11561
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/assets.py",
+      "sha256": "73b6f3ebb5b4e456470da2f6d9838a7364f85ae7885bac175e0eda1d102ed843",
+      "source_sha256": "73b6f3ebb5b4e456470da2f6d9838a7364f85ae7885bac175e0eda1d102ed843",
+      "bytes": 11067
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/capture.gd",
+      "sha256": "8c9a947ee4b2031e87bfcc073e17ad89ff3e7349a76f9e5b85b4314ac7b5a7e6",
+      "source_sha256": "8c9a947ee4b2031e87bfcc073e17ad89ff3e7349a76f9e5b85b4314ac7b5a7e6",
+      "bytes": 1981
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/core.py",
+      "sha256": "a07a5a3272bfe1038dfefe5b258b1abd33f804fdcacf88a1decd0ec282bbcb42",
+      "source_sha256": "a07a5a3272bfe1038dfefe5b258b1abd33f804fdcacf88a1decd0ec282bbcb42",
+      "bytes": 12594
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/edit_motion.gd",
+      "sha256": "bbc9059da06ce8209b343546e8c98fe01555b772c3c6d263000c91c9fa8496fa",
+      "source_sha256": "712fc38dd4b9e2fb606054976294827465527d26b0a07878c0888008c9310e32",
+      "bytes": 3713
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/editing.py",
+      "sha256": "e75cbf14a5584dce2145860b2448386d6cfdb4efbc1074bc21a31ea65dda5d8f",
+      "source_sha256": "e75cbf14a5584dce2145860b2448386d6cfdb4efbc1074bc21a31ea65dda5d8f",
+      "bytes": 4568
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/inspect.gd",
+      "sha256": "91393eadc8d0a4048db675d2086c680c677e66baadb29b1984e585dd9287178c",
+      "source_sha256": "680ec445cae0f88f0b945f7e9a745042daf7fec01a245555e5aa12924192be9b",
+      "bytes": 2284
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/review.gd",
+      "sha256": "a4014d26328b3b9eceaaa82e9a2fd679236942d55bf23c2430bc7560884f0b04",
+      "source_sha256": "a4014d26328b3b9eceaaa82e9a2fd679236942d55bf23c2430bc7560884f0b04",
+      "bytes": 1682
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/review.py",
+      "sha256": "c07b8efb8eebe83ab503d41556aeedeb13292b5a36eaa9d0e2bcc26c0b91bbdf",
+      "source_sha256": "c07b8efb8eebe83ab503d41556aeedeb13292b5a36eaa9d0e2bcc26c0b91bbdf",
+      "bytes": 6361
+    },
+    {
+      "path": "pixelspark-art-mcp/pixelspark_art_mcp/studio.py",
+      "sha256": "bf1d48d222c22611ea5728b0f58ea3654234baba39df0c2f43ae871f809dec80",
+      "source_sha256": "bf1d48d222c22611ea5728b0f58ea3654234baba39df0c2f43ae871f809dec80",
+      "bytes": 280
+    },
+    {
+      "path": "pixelspark-art-mcp/pyproject.toml",
+      "sha256": "4e94199a1271f6d4566ed5c62b5f0f21536a0b857b38bcfeabebfbe8f19139db",
+      "source_sha256": "73e692cea4c3b87c6188b399b8d7e99f869d3e544160bea088ea31a76e3ca03f",
+      "bytes": 613
+    },
+    {
+      "path": "pixelspark-art-mcp/README.md",
+      "sha256": "3925891df08b2e14e2c0800e943c902c0d33b2373efe96773252d56f701af35a",
+      "source_sha256": "3925891df08b2e14e2c0800e943c902c0d33b2373efe96773252d56f701af35a",
+      "bytes": 3765
+    },
+    {
+      "path": "pixelspark-art-mcp/tests/integration_native.py",
+      "sha256": "709b9e637c83563a39bc93ecdfaee44448189a2332939563d7f8383864206326",
+      "source_sha256": "709b9e637c83563a39bc93ecdfaee44448189a2332939563d7f8383864206326",
+      "bytes": 6910
+    },
+    {
+      "path": "pixelspark-art-mcp/tests/test_core.py",
+      "sha256": "1ca34421cd35453824c123e9442d158d5a4ae859c82c46d270e52f34f2b70663",
+      "source_sha256": "1ca34421cd35453824c123e9442d158d5a4ae859c82c46d270e52f34f2b70663",
+      "bytes": 1948
+    },
+    {
+      "path": "pixelspark-art-mcp/tests/test_studio.py",
+      "sha256": "be9ca8d9f3e626a7c03fc41762397bfa16e2dee517299efe8b569385639cf628",
+      "source_sha256": "be9ca8d9f3e626a7c03fc41762397bfa16e2dee517299efe8b569385639cf628",
+      "bytes": 3905
+    },
+    {
+      "path": "pixelspark-art-mcp/tests/test_workflows.py",
+      "sha256": "f3d1964b8afadffa763449527742210e5052ab8eeee5f6fb0929069081cd3f64",
+      "source_sha256": "f3d1964b8afadffa763449527742210e5052ab8eeee5f6fb0929069081cd3f64",
+      "bytes": 3196
+    },
+    {
+      "path": "pixelspark-art-mcp/uv.lock",
+      "sha256": "990b347c551b0ea3d18e1237965a9c4974887499727e27890edae8dc6d2d8d54",
+      "source_sha256": "990b347c551b0ea3d18e1237965a9c4974887499727e27890edae8dc6d2d8d54",
+      "bytes": 119259
+    },
+    {
+      "path": "README.md",
+      "sha256": "72c0a5f7cd19253df5544fd8fe03a1a1f54036a623d2022326920ee17fc3786e",
+      "source_sha256": "72c0a5f7cd19253df5544fd8fe03a1a1f54036a623d2022326920ee17fc3786e",
+      "bytes": 3630
+    },
+    {
+      "path": "tests/check_wheels.py",
+      "sha256": "6d720f8f9b0891ab67b79dfd2bed05b66c2cca0a7ad02d41efb247b3d92bb079",
+      "source_sha256": "6d720f8f9b0891ab67b79dfd2bed05b66c2cca0a7ad02d41efb247b3d92bb079",
+      "bytes": 793
+    },
+    {
+      "path": "tests/test_toolkit.py",
+      "sha256": "7c0010cac455cfce5ff92308aa8d161924a784aec830721c0d1036b7a10756a7",
+      "source_sha256": "7c0010cac455cfce5ff92308aa8d161924a784aec830721c0d1036b7a10756a7",
+      "bytes": 3036
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "61579bdaa80545c22547284947333c958f9809f04e1f37e88de7a0667e0128d8",
+      "source_sha256": "61579bdaa80545c22547284947333c958f9809f04e1f37e88de7a0667e0128d8",
+      "bytes": 1381
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "4261d6dd14188e326fe13c3b7b7c7fbdd2146b0e9e34545de3f7a89efc8960e4",
+      "source_sha256": "4261d6dd14188e326fe13c3b7b7c7fbdd2146b0e9e34545de3f7a89efc8960e4",
+      "bytes": 63
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "cc28e3aa458d9c7c43e4e4add8de0f188c401946500aa576d765390b6f176c29",
+      "source_sha256": "cc28e3aa458d9c7c43e4e4add8de0f188c401946500aa576d765390b6f176c29",
+      "bytes": 218
+    },
+    {
+      "path": "toolkit.py",
+      "sha256": "44399459a5ca7edb41ef0895de8ae75bacf76285e61289fc6852b520d263d394",
+      "source_sha256": "44399459a5ca7edb41ef0895de8ae75bacf76285e61289fc6852b520d263d394",
+      "bytes": 10982
+    }
+  ]
+}

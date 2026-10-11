@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "asset_id": "example_ui",
+  "kind": "ui_atlas",
+  "source": "examples/sources/ui.aseprite",
+  "output": "examples/project/ui",
+  "margins": [4, 4, 4, 4]
+}

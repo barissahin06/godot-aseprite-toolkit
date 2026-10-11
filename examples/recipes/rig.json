@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "asset_id": "example_rig",
+  "kind": "rig",
+  "source": "examples/sources/rig.aseprite",
+  "root": [16, 28],
+  "parts": {
+    "body": { "parent": "root", "length": 20 },
+    "weapon": { "parent": "body", "length": 16, "z_index": 1 }
+  },
+  "scene": "examples/project/rig/rig.tscn",
+  "manifest": "generated/examples/rig.json",
+  "textures": "examples/project/rig/parts",
+  "animation_library": "res://rig/motion.tres",
+  "autoplay": "idle",
+  "required_markers": { "attack": ["contact", "chain_ready"] }
+}

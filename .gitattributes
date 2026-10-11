@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.aseprite binary
+*.png binary
+*.gif binary

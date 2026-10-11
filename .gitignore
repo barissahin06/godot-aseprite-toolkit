@@ -1,0 +1,16 @@
+.venv/
+**/.venv/
+**/__pycache__/
+**/*.egg-info/
+**/.godot/
+**/.art-history/
+**/.art-operation.lock
+**/dist/
+**/build/
+generated/
+.codex/config.toml
+.codex/config.toml.backup-*
+.env
+**/.env
+*.pyc
+**/config.pending.toml
