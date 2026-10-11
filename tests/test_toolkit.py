@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import sys
 import tempfile
@@ -36,7 +37,10 @@ class ToolkitTests(unittest.TestCase):
         self.assertTrue(any(p.endswith('core/runtime.py') for p in paths))
         self.assertTrue(any(p.endswith('motion.tres') for p in paths))
         self.assertIn('tests/check_wheels.py',paths)
-        self.assertFalse(any(any(x in p.split('/') for x in ['our-game','.venv','.godot','.env','generated']) for p in paths))
+        self.assertIn('benchmarks/sword_duelist/brief.json',paths)
+        self.assertIn('benchmarks/sword_duelist/project/compare.gd',paths)
+        self.assertFalse(any('project/assets/' in p for p in paths))
+        self.assertFalse(any(any(x in p.split('/') for x in ['our-game','.venv','.godot','.art-history','.env','generated']) for p in paths))
         self.assertNotIn('aseprite-mcp/.mcp.json',paths)
 
     def test_packages_include_native_resource_data(self):
@@ -52,6 +56,18 @@ class ToolkitTests(unittest.TestCase):
             self.assertEqual(json.loads((first/'source-manifest.json').read_text())['source_commit'],json.loads((second/'source-manifest.json').read_text())['source_commit'])
             for entry in json.loads((first/'source-manifest.json').read_text())['files']:
                 self.assertEqual((first/entry['path']).read_bytes(),(second/entry['path']).read_bytes())
+
+    def test_blend_binary_is_copied_without_text_normalization(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/'source.blend'
+            content=b'BLENDER\x00\r\n\xff\x01\r\n'
+            source.write_bytes(content)
+            destination=Path(folder)/'package'
+            with patch.object(toolkit,'distribution_files',return_value={source:Path('benchmarks/duelist.blend')}):
+                toolkit.package(type('Args',(),{'output':str(destination)})())
+            self.assertEqual((destination/'benchmarks/duelist.blend').read_bytes(),content)
+            entry=json.loads((destination/'source-manifest.json').read_text())['files'][0]
+            self.assertEqual(entry['sha256'],hashlib.sha256(content).hexdigest())
 
 
 if __name__ == '__main__':

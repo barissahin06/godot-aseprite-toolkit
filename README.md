@@ -1,8 +1,8 @@
 # Godot–Aseprite toolkit
 
-Windows-first Codex tools. PixelSpark keeps development sources here; the private
-barissahin06/godot-aseprite-toolkit repository receives a hash-verified distribution.
-The standalone toolkit needs no game files.
+Windows-first Codex tools. The private barissahin06/godot-aseprite-toolkit repository
+is the development upstream. PixelSpark consumes tested versions; the toolkit needs
+no game files. The initial import's provenance is retained in source-manifest.json.
 
 ## Project installation
 
@@ -41,6 +41,11 @@ The bridge adds batch_edit_sprite, edit_animation, build_asset and review_asset.
 See its README for contracts. Four independent examples cover rig, FX, UI atlas and layered environment.
 Their authored motion is kept; derived textures/scenes/caches are excluded from distribution.
 
+The [sword duelist benchmark](benchmarks/sword_duelist/README.md) compares native
+Aseprite poses with a real Blender rig rendered to pixels and retouched in Aseprite.
+It includes editable sources and an identical Godot review; the geometric examples
+remain technical fixtures rather than art quality targets.
+
 ## Verification and distribution
 
 ```powershell
@@ -55,5 +60,6 @@ Native acceptance uses temporary copies, Unicode/spaces and real MCP/app calls. 
 contracts and actual wheels. Aseprite native acceptance needs the licensed local app;
 Linux/macOS native behavior is unverified. The destination must be empty and separate.
 Only named packages, authored examples, tests, setup/docs and CI are copied. source-manifest.json
-records each SHA-256 and PixelSpark commit. Commit sources before distribution; update by export,
-not independent edits to the distribution copy.
+records each SHA-256 and initial import provenance. Commit sources before distribution.
+Develop here; a PixelSpark consumer updater is a separate release step. Do not copy
+the toolkit's root config, CI or benchmark project over a game's files.

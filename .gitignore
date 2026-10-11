@@ -8,6 +8,7 @@
 **/dist/
 **/build/
 generated/
+benchmarks/sword_duelist/project/assets/
 .codex/config.toml
 .codex/config.toml.backup-*
 .env

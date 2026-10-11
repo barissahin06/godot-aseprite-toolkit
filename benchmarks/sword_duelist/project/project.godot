@@ -1,0 +1,15 @@
+config_version=5
+
+[application]
+config/name="Sword duelist route comparison"
+run/main_scene="res://compare.tscn"
+
+[display]
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/stretch/mode="canvas_items"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/canvas_textures/default_texture_filter=0

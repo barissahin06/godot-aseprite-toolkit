@@ -142,6 +142,10 @@ def distribution_files() -> dict[Path, Path]:
             authored = relative.as_posix() in {'examples/project/project.godot','examples/project/.gitignore','examples/project/rig/motion.tres'}
             if authored or (source.parent != BASE/'examples/project' and 'project' not in relative.parts and (source.suffix in {'.aseprite','.lua','.gd','.json','.md'} or source.name.endswith('.gd.uid'))):
                 result[source] = relative
+    for source in (BASE/'benchmarks/sword_duelist').rglob('*'):
+        relative = source.relative_to(BASE)
+        if source.is_file() and not any(part in {'.godot','.art-history','.venv','.pytest_cache','generated','__pycache__','assets'} for part in relative.parts) and source.suffix in {'.py','.lua','.gd','.uid','.json','.md','.aseprite','.blend','.godot','.tscn'}:
+            result[source] = relative
     result[BASE/'toolkit.py'] = Path('toolkit.py')
     result[BASE/'README.md'] = Path('README.md')
     for source_name,target_name in [('toolkit-ci.yml','.github/workflows/verify.yml'),('toolkit.gitignore','.gitignore'),('toolkit.gitattributes','.gitattributes')]:
@@ -164,7 +168,7 @@ def package(args) -> dict:
     entries = []
     for source,relative in sorted(distribution_files().items()):
         original = source.read_bytes()
-        data = original if source.suffix in {'.aseprite','.png','.gif'} else original.replace(b'\r\n',b'\n')
+        data = original if source.suffix in {'.aseprite','.blend','.png','.gif'} else original.replace(b'\r\n',b'\n')
         target = destination/relative
         assert target.resolve().is_relative_to(destination)
         target.parent.mkdir(parents=True, exist_ok=True)
