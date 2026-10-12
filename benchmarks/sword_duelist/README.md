@@ -96,4 +96,26 @@ the baseline, with native and nearest before/after previews in both directions a
 on both backgrounds. It verifies saved baseline renders against the accepted source.
 
 Review: `generated/benchmarks/sword_duelist/walk-detail/review/index.html`.
-The finish awaits user visual acceptance; no gameplay integration is included.
+The user accepted the material detail. No gameplay integration is included.
+
+## Low ready sword carry
+
+`aseprite/walk_carry.aseprite` revises the weapon arm on a copy of that accepted
+detailed walk. The hand is lower, the elbow bends, fingers wrap across the handle,
+and the blade angle varies slightly through the stride while its geometric length
+stays fixed. The accepted body, feet, rear arm, cloth and their finish remain intact.
+
+```powershell
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/carry.py
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/walk_study.py --carry
+```
+
+The authoring command draws staged weapon poses using the existing native recipes,
+then replaces only the weapon layers and finish pixels inside their old/new coverage.
+It verifies all other layer pixels, timing, tags, pivots, palette and declared foot
+contacts before publication. Existing sources are not redrawn without `--redraw`;
+both accepted walk sources and their motion metadata are protected by hashes.
+
+Review: `generated/benchmarks/sword_duelist/walk-carry/review/index.html` compares
+the accepted detailed walk with this revision. The user accepted this carry pose.
+This remains a character study; production combat and gameplay integration are separate.

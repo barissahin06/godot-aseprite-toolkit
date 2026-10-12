@@ -19,11 +19,25 @@ try:
     detail_spec = importlib.util.spec_from_file_location("detail", BASE / "benchmarks/sword_duelist/detail.py")
     detail = importlib.util.module_from_spec(detail_spec)
     detail_spec.loader.exec_module(detail)
+    carry_spec = importlib.util.spec_from_file_location("carry", BASE / "benchmarks/sword_duelist/carry.py")
+    carry = importlib.util.module_from_spec(carry_spec)
+    carry_spec.loader.exec_module(carry)
 finally:
     sys.path.pop(0)
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_carry_edit_rejects_changes_outside_the_selected_weapon(self):
+        before = Image.new('RGBA', (8,8))
+        after = before.copy()
+        mask = Image.new('L', (8,8))
+        mask.putpixel((4,4),255)
+        after.putpixel((4,4),(118,139,150,255))
+        self.assertEqual(carry.verify_scope(before,after,mask),1)
+        after.putpixel((4,7),(18,21,34,255))
+        with self.assertRaisesRegex(AssertionError,'outside the weapon'):
+            carry.verify_scope(before,after,mask)
+
     def test_material_finish_preserves_shape_and_rejects_timing_changes(self):
         with tempfile.TemporaryDirectory() as folder:
             before,after = Path(folder)/'before.png',Path(folder)/'after.png'

@@ -65,15 +65,20 @@ def main() -> None:
     parser.add_argument("--aseprite", default="C:/Tools/Aseprite/aseprite.exe")
     parser.add_argument("--godot", default="C:/Tools/Godot/godot_console.exe")
     parser.add_argument("--redraw", action="store_true")
-    parser.add_argument("--detail", action="store_true", help="Review the separate material finish with the accepted walk as baseline")
+    variant = parser.add_mutually_exclusive_group()
+    variant.add_argument("--detail", action="store_true", help="Review the separate material finish with the accepted walk as baseline")
+    variant.add_argument("--carry", action="store_true", help="Review the lower sword carry against the accepted detailed walk")
     args = parser.parse_args()
-    folder = OUTPUT/'walk-detail' if args.detail else FOLDER
-    source = BENCH/'aseprite/walk_detail.aseprite' if args.detail else SOURCE
+    name = 'walk-carry' if args.carry else 'walk-detail' if args.detail else 'walk-study'
+    folder = OUTPUT/name
+    source = BENCH/'aseprite'/('walk_carry.aseprite' if args.carry else 'walk_detail.aseprite' if args.detail else 'walk_study.aseprite')
+    baseline_source = BENCH/'aseprite/walk_detail.aseprite' if args.carry else SOURCE
+    baseline_folder = OUTPUT/'walk-detail' if args.carry else FOLDER
     folder.mkdir(parents=True, exist_ok=True)
-    if args.detail and args.redraw:
-        parser.error('Use detail.py --redraw to recreate the material finish')
-    if args.detail and not source.is_file():
-        raise FileNotFoundError('Run detail.py before reviewing the material finish')
+    if (args.detail or args.carry) and args.redraw:
+        parser.error('Use detail.py or carry.py --redraw to recreate that source')
+    if (args.detail or args.carry) and not source.is_file():
+        raise FileNotFoundError('Run detail.py or carry.py before reviewing that source')
     if not source.is_file() or args.redraw:
         with workspace_lock(ROOT), tempfile.TemporaryDirectory(dir=folder, prefix="source-stage-") as directory:
             stage = Path(directory)
@@ -127,8 +132,8 @@ def main() -> None:
         for i in range(8):
             keys.alpha_composite(atlas.crop((i*3*96,0,(i*3+1)*96,80)), ((i%4)*96,(i//4)*80))
         keys.resize((1152,480), Image.Resampling.NEAREST).save(review/'key-poses.png')
-    if args.detail:
-        baseline_sheet, baseline_data = export(SOURCE, folder/'baseline', args.aseprite)
+    if args.detail or args.carry:
+        baseline_sheet, baseline_data = export(baseline_source, folder/'baseline', args.aseprite)
         with Image.open(baseline_sheet) as baseline:
             comparison = Image.new('RGBA', (384,160), '#202333')
             for row, path in enumerate((baseline_sheet,sheet)):
@@ -138,26 +143,29 @@ def main() -> None:
             comparison.resize((1152,480),Image.Resampling.NEAREST).save(review/'material-comparison.png')
             for mode in ("dark_right", "dark_left", "light_right", "light_left"):
                 for prefix in ('native_', ''):
-                    before = FOLDER/'review'/(prefix+mode+'.gif')
+                    before = baseline_folder/'review'/(prefix+mode+'.gif')
                     if not before.is_file():
-                        raise FileNotFoundError('Capture the accepted walk first with walk_study.py')
+                        raise FileNotFoundError('Capture the baseline first with walk_study.py (--detail for the carry baseline)')
                     shutil.copyfile(before, review/('before_'+prefix+mode+'.gif'))
             for sample in (0,7,15,26):
                 frame_index = math.floor(sample/30/0.04+0.00001) % 24
                 expected = baseline.crop((frame_index*96,0,(frame_index+1)*96,80)).convert('RGBA')
-                with Image.open(FOLDER/'review/dark_right'/f'{sample:04d}.png') as picture:
+                with Image.open(baseline_folder/'review/dark_right'/f'{sample:04d}.png') as picture:
                     before = picture.convert('RGB').crop((104,160,200,240))
                     assert all(not p[3] or p[:3] == q for p,q in zip(expected.get_flattened_data(),before.get_flattened_data())), 'Before capture does not match the accepted source'
-        report['baseline_sha256'] = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
+        report['baseline_sha256'] = hashlib.sha256(baseline_source.read_bytes()).hexdigest()
     report.update({"ok": True, "source_sha256":hashlib.sha256(original).hexdigest(), "capture_fps": 30, "source_fps": 25, "viewport": [640,360], "opaque_pixel_checks": pixel_checks,
                    "root_motion": "2 native pixels per authored 40ms frame"})
     (review/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
     html = HTML
-    if args.detail:
-        html = html.replace('Aseprite / controlled walk','Aseprite / material finish')
+    if args.detail or args.carry:
+        heading = 'Aseprite / low ready sword carry' if args.carry else 'Aseprite / material finish'
+        description = ('Before / after. Lower hand, relaxed elbow and a restrained blade angle change. Accepted body, feet, cloth and timings remain unchanged.'
+                       if args.carry else 'Before / after. Accepted poses, silhouette, foot contacts and timings are unchanged. Helmet, metal edges, cloth folds and leather are finished on a separate layer.')
+        html = html.replace('Aseprite / controlled walk',heading)
         html = html.replace('8 drawn key poses, 16 in-betweens. Original comparison kept in Git. Inspect the silhouettes, weight transfer and foot plants.',
-                            'Before / after. Accepted poses, silhouette, foot contacts and timings are unchanged. Helmet, metal edges, cloth folds and leather are finished on a separate layer.')
-        html = html.replace('<img id="native"', '<p>Before</p><img id="before" class="pixel-preview" width="288" alt="Accepted walk before material finish"><p>After</p><img id="native"')
+                            description)
+        html = html.replace('<img id="native"', '<p>Before</p><img id="before" class="pixel-preview" width="288" alt="Accepted baseline walk"><p>After</p><img id="native"')
         html = html.replace('document.querySelector(\'#scene\').src=mode+\'.gif\'', 'document.querySelector(\'#scene\').src=mode+\'.gif\';document.querySelector(\'#before\').src=\'before_native_\'+mode+\'.gif\'')
         html = html.replace('<a href="key-poses.png">Eight key poses</a>', '<a href="material-comparison.png">Before/after key poses</a> / <a href="key-poses.png">Finished key poses</a>')
     (review/'index.html').write_text(html,encoding='utf-8')

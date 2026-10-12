@@ -2,6 +2,8 @@
 local root = assert(app.params.root)
 local destination = assert(app.params.output)
 local study = app.params.study == 'true'
+local carry = app.params.carry == 'true'
+assert(not carry or study, 'The carry revision applies only to the walk study')
 assert(not app.fs.isFile(destination), 'Refusing to overwrite an edited source')
 local input = assert(io.open(root..'/brief.json', 'r'))
 local brief = json.decode(input:read('*a')); input:close()
@@ -171,6 +173,11 @@ local function sword(p)
   line(g[1]+nx*4,g[2]+ny*4,g[1]-nx*4,g[2]-ny*4,'outline')
   line(g[1]+nx*3,g[2]+ny*3,g[1]-nx*3,g[2]-ny*3,'bronze')
   pixel(g[1],g[2],'bronze_light');line(h[1]-vx*3,h[2]-vy*3,h[1]+vx,h[2]+vy,'bronze_shadow')
+  if p.carry then
+    -- Fingers cross the handle instead of leaving the grip painted over the fist.
+    line(h[1]-nx,h[2]-ny,h[1]+nx,h[2]+ny,'bronze')
+    pixel(h[1]+nx,h[2]+ny,'bronze_light')
+  end
 end
 local neutral={dx=0,dy=0,fk={48,58},ff={50,68},bk={38,58},bf={35,68},e={55,39},h={55,44},tip={64,19}}
 local function idle(i)
@@ -206,12 +213,22 @@ local function study_walk(i)
   local v=study_legs[i]
   local dy=({0,2,0,-2,0,2,0,-2})[i]
   local h=({{54,44},{54,45},{55,43},{56,41},{57,42},{57,43},{56,43},{55,43}})[i]
+  local e={h[1],h[2]-5}
+  if carry then
+    h=({{54,47},{54,48},{55,47},{55,46},{54,47},{53,49},{53,48},{54,46}})[i]
+    e=({{48,41},{48,43},{48,41},{48,39},{49,41},{49,43},{49,41},{48,39}})[i]
+  end
   local be=({{44,40},{45,42},{41,42},{36,39},{34,39},{34,41},{37,41},{41,39}})[i]
   local bh=({{49,45},{50,45},{44,47},{34,45},{30,45},{32,47},{38,47},{45,43}})[i]
-  return {profile=true,dx=({0,0,-1,-1,0,0,1,1})[i],dy=dy,head_dy=dy/2,
+  local p={profile=true,dx=({0,0,-1,-1,0,0,1,1})[i],dy=dy,head_dy=dy/2,
     fk=v[1],ff=v[2],bk=v[3],bf=v[4],fmode=v[5],bmode=v[6],
-    e={h[1],h[2]-5},h=h,tip={h[1]+9,h[2]-25},be=be,bh=bh,
+    e=e,h=h,tip={h[1]+9,h[2]-25},be=be,bh=bh,
     wave=({0,1,1,0,0,-1,-1,0})[i]}
+  if carry then
+    p.carry=true
+    p.sword_angle=math.rad(({-44,-43,-45,-48,-47,-43,-44,-46})[i])
+  end
+  return p
 end
 local function study_between(i,t)
   local a,b=study_walk(i),study_walk(i%8+1)
@@ -225,6 +242,11 @@ local function study_between(i,t)
   if t>0 then
     if a.fmode=='toe' and b.fmode=='air' then p.fmode='air' end
     if a.bmode=='toe' and b.bmode=='air' then p.bmode='air' end
+  end
+  if p.carry then
+    local length=math.sqrt(9*9+25*25)
+    p.tip={p.h[1]+math.cos(p.sword_angle)*length,p.h[2]+math.sin(p.sword_angle)*length}
+    assert(math.abs(math.sqrt((p.tip[1]-p.h[1])^2+(p.tip[2]-p.h[2])^2)-length)<.00001)
   end
   return p
 end
