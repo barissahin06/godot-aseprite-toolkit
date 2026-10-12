@@ -121,7 +121,8 @@ def quality(sheet: Path, data: dict, expected_palette: list[str] | None = None) 
 
 def validate_staged(project: Path, scene: str, godot: str, required_markers: dict | None = None) -> None:
     (project / "project.godot").write_text('config_version=5\n[rendering]\nrenderer/rendering_method="gl_compatibility"\ntextures/default_filters/use_nearest_mipmap_filter=false\n', encoding="utf-8")
-    run_native(godot, ["--headless", "--path", str(project), "--editor", "--import"], project)
+    # Let the editor finish its background startup work before teardown (Godot 4.6.3).
+    run_native(godot, ["--headless", "--path", str(project), "--editor", "--import", "--quit-after", "120"], project)
     report = project / "inspection.json"
     result = run_native(godot, ["--headless", "--path", str(project), "--script", str(Path(__file__).with_name("inspect.gd")), "--", scene, str(report)], project)
     if "INSPECT_OK" not in result["log"]:

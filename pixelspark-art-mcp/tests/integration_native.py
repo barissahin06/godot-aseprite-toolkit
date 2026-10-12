@@ -95,9 +95,19 @@ async def main():
                         args['animation']='attack'
                     if kind=='fx':
                         args['effects']=['example_fx']
+                        args.update(animation='default',fps=50,duration=.36)
                     review=await call('review_asset',args)
                     assert review['viewport']==[320,180] and all(m['frames']==18 for m in review['modes'].values())
                     assert (root/f'generated/review/{kind}/index.html').is_file()
+                    if kind=='fx':
+                        assert review['sample_times'][0]==0 and review['timeline']['sampling']=='exact_animation_player'
+                        assert [key['captured_samples'] for key in review['timeline']['frame_keys']]==[list(range(6)),list(range(6,12)),list(range(12,18))]
+                        assert not review['unsampled_frame_keys']
+                        shutil.copyfile(Path(__file__).with_name('review_playback.gd'),project/'review_playback.gd')
+                        checked=await call('run_godot_script',{'script_path':'examples/project/review_playback.gd','arguments':[scene,str(root/'generated/review/fx'),str(Path(__file__).resolve().parents[1]/'pixelspark_art_mcp/review.gd')]})
+                        assert 'REVIEW_PLAYBACK_OK' in checked['log']
+                        await call('review_asset',{'scene':scene,'animation':'default','duration':.36,'fps':30,'output_dir':'generated/review/bad-sampling','baseline_dir':'generated/review/fx'},True)
+                        assert not (root/'generated/review/bad-sampling').exists()
                 await call('capture_animation',{'scene':scenes['rig'],'animation':'idle','times':[0.0,0.3,0.6],'output_dir':'generated/exact'})
                 compared=await call('review_asset',{'scene':scenes['rig'],'animation':'attack','duration':0.6,'output_dir':'generated/review/comparison','baseline_dir':'generated/review/rig'})
                 assert len(compared['baseline_changed_pixels'])==4

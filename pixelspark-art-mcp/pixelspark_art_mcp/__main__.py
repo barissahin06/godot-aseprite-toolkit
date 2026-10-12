@@ -124,7 +124,7 @@ def run_godot_script(script_path: str,arguments: list[str] | None=None) -> dict:
 @exclusive_workspace
 def import_godot_assets() -> dict:
     """Run native import before loading newly exported textures/scenes."""
-    return godot(["--editor","--import","--quiet"])
+    return godot(["--editor","--import","--quit-after","120","--quiet"])
 
 @mcp.tool()
 @exclusive_workspace
@@ -178,10 +178,10 @@ def build_asset(recipe_path: str) -> dict[str, Any]:
 async def review_asset(scene: str, animation: str="", duration: float=2.0,
                  output_dir: str="generated/art-review/playback", animation_player: str="AnimationPlayer",
                  baseline_dir: str="", source_path: str="", effects: list[str] | None=None,
-                 viewport_size: list[int] | None=None) -> dict[str, Any]:
-    """Capture actual 30fps playback, both directions, explicit effects on/off; return GIFs, comparison/report and local nearest-pixel review page."""
+                 viewport_size: list[int] | None=None, fps: int=30) -> dict[str, Any]:
+    """Review at 20..50 fps (default 30), both directions and explicit effects on/off. Selected AnimationPlayer clips start at exact time zero. Return GIFs, native timing/markers, missed frame keys and a frame-scrubbable before/after page. Baselines must use the same sampling settings; diagnostics do not approve artwork."""
     return await review(REPO_ROOT, PROJECT_ROOT, executable("GODOT_PATH","godot"), scene, animation, duration,
-                  output_dir, animation_player, baseline_dir, source_path, effects, viewport_size)
+                  output_dir, animation_player, baseline_dir, source_path, effects, viewport_size, fps)
 
 def main():
     if len(sys.argv)==3 and sys.argv[1]=="build":

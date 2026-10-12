@@ -69,17 +69,36 @@ warnings require visual interpretation. No automatic repainting or pixel smoothi
 
 ## Review and recovery
 
-review_asset(scene, animation="", duration=2, ...) records actual 30fps playback, up to ten seconds.
+review_asset(scene, animation="", duration=2, ..., fps=30) records playback at 20–50 fps,
+up to ten seconds. The default remains 30 fps; use 50 fps for short drawn poses.
+Selected AnimationPlayer clips are sampled from exactly time zero, honoring single-shot,
+linear-loop and ping-pong timing. Procedural scenes without a selected clip advance normally.
 Four modes show left/right and explicit effects on/off. Standalone subjects are centered;
 use an asset/staging scene, not a game coordinator. animation_player selects nested players;
 effects lists CanvasItem paths, source_path enables Aseprite coverage/overlap audit,
 baseline_dir enables comparison, viewport_size overrides the configured viewport.
-Output: GIFs, PNGs, contact sheet, JSON and nearest-pixel HTML. Serve the directory locally
+Output: GIFs, PNGs, contact sheet, JSON and nearest-pixel HTML with a frame slider. The report
+contains native clip/marker timing, authored frame-key coverage, unchanged image runs and
+per-sample changed-pixel counts. Uncaptured frame keys produce a warning; neither a static
+pose nor a large pixel change is automatically an artistic defect. Foot sliding, grip and
+weight still need visual review. contact/chain_ready markers expose preparation/follow-through/
+recovery durations when present.
+
+Before/after frame comparison requires matching viewport, fps, sample count and sampling mode.
+Old baselines created before time-zero sampling must be regenerated. Baseline and output paths
+must be separate; mismatched settings fail before rendering. Before images are copied into the
+review directory so both versions scrub at the same time without external files.
+Serve the directory locally
 if browser file-fetch restrictions block the comparison JSON. Diagnostics do not approve aesthetics.
 
 Shared locks, bounded processes, checkpoints and verified publication journals are used by both
 packages. Inspect a stale lock PID before removal; incomplete publication is rolled back on the next
 acquired operation. Lua/GDScript are trusted code, not sandboxes.
+
+Godot imports keep `--import`'s resource-scan wait and allow 120 editor iterations before
+teardown to avoid the observed 4.6.3 Android-export monitor/startup race. Engine error logs
+still fail the operation. The CLI ordering is documented in
+[Godot's command-line reference](https://docs.godotengine.org/en/4.6/tutorials/editor/command_line_tutorial.html).
 
 uv run --frozen python -m unittest discover -s tests runs pure contracts.
 uv run --frozen python tests/integration_native.py tests real stdio/native apps on temporary
