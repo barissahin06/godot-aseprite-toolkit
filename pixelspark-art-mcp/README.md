@@ -5,6 +5,10 @@ and GODOT_PATH. Legacy PIXELSPARK_REPO/PROJECT and pixelspark_art_mcp imports re
 The canonical server/console is aseprite-godot-art. Viewport comes from the Godot project;
 640×360 remains the fallback. Windows/Godot 4.6.3 is the verified native environment.
 
+In a source checkout, the frozen uv environment links the sibling Aseprite package
+as editable. Both servers therefore use the current managed source; an old wheel
+copy cannot silently keep earlier editing behavior after a consumer update.
+
 ## Existing APIs
 
 inspect_workspace, edit_aseprite, build_aseprite_skeleton2d, validate_rig_manifest,
