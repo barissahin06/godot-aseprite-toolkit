@@ -22,11 +22,25 @@ try:
     carry_spec = importlib.util.spec_from_file_location("carry", BASE / "benchmarks/sword_duelist/carry.py")
     carry = importlib.util.module_from_spec(carry_spec)
     carry_spec.loader.exec_module(carry)
+    combat_spec = importlib.util.spec_from_file_location("combat", BASE / "benchmarks/sword_duelist/combat.py")
+    combat = importlib.util.module_from_spec(combat_spec)
+    combat_spec.loader.exec_module(combat)
 finally:
     sys.path.pop(0)
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_combat_review_contact_and_ready_boundaries(self):
+        self.assertEqual(sum(combat.DURATIONS),720)
+        self.assertEqual(combat.review_frame(.95),23)
+        self.assertEqual(combat.review_frame(.96),24)
+        self.assertEqual(combat.review_frame(1.2),24)
+        self.assertEqual(combat.review_frame(1.479),29)
+        self.assertEqual(combat.review_frame(1.48),30)
+        self.assertEqual(combat.review_frame(1.74),36)
+        self.assertEqual(combat.review_frame(1.92),24)
+        self.assertEqual(combat.review_frame(2.4),0)
+
     def test_carry_edit_rejects_changes_outside_the_selected_weapon(self):
         before = Image.new('RGBA', (8,8))
         after = before.copy()

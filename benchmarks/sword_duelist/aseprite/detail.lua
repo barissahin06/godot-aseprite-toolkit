@@ -8,7 +8,7 @@ end
 local brief=read(assert(app.params.brief))
 local poses=read(assert(app.params.poses))
 local spr=assert(app.open(source))
-assert(spr.colorMode==ColorMode.RGB and #spr.frames==24 and #spr.layers==5)
+assert(spr.colorMode==ColorMode.RGB and #spr.frames==#poses and #spr.layers==5)
 local C,groups={},{}
 for name,hex in pairs(brief.palette) do
   C[name]=app.pixelColor.rgba(tonumber(hex:sub(2,3),16),tonumber(hex:sub(4,5),16),tonumber(hex:sub(6,7),16),255)
@@ -99,6 +99,6 @@ for i,p in ipairs(poses) do
   total=total+painted
   spr:newCel(finish,frame,image,Point(0,0))
 end
-assert(#spr.layers==6 and #spr.frames==24)
+assert(#spr.layers==6 and #spr.frames==#poses)
 spr:saveAs(output);spr:close()
 print('DETAIL_FINISH_OK '..total)

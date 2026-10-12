@@ -119,3 +119,29 @@ both accepted walk sources and their motion metadata are protected by hashes.
 Review: `generated/benchmarks/sword_duelist/walk-carry/review/index.html` compares
 the accepted detailed walk with this revision. The user accepted this carry pose.
 This remains a character study; production combat and gameplay integration are separate.
+
+## Controlled attack study
+
+`aseprite/combat_study.aseprite` preserves all 24 accepted walk frames and appends
+16 drawn attack poses. The ready pose settles both feet before the strike. A short
+wind-up, overhead passage, forward weight shift and follow-through return to that
+same ready pose. The source keeps the six editable layers and original palette.
+
+```powershell
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/combat.py
+```
+
+Existing sources are retained; `--redraw` explicitly checkpoints and recreates only
+this study. The script verifies unchanged walk pixels/timing/pivots, declared attack
+foot contacts, palette/bounds and matching ready/recovery frames. It uses the general
+sprite recipe's native AnimationLibrary support: the attack does not loop, lasts
+0.72 seconds, has `contact` at 0.28 and `chain_ready` at 0.54, and uses discrete frame
+keys with exact authored durations. These timings are study choices, not game rules.
+
+Review: `generated/benchmarks/sword_duelist/combat-study/review/index.html`.
+Its walk/ready/attack/ready sequence repeats only in the review. Native Godot renders
+are checked against source pixels; normal speed, both directions and light/dark
+backgrounds are available. Attack aesthetics await user approval.
+
+Only reusable MCP code and its update script are transferred to PixelSpark. These
+character studies, Blender sources and review outputs stay in the toolkit repository.

@@ -3,6 +3,8 @@ local root = assert(app.params.root)
 local destination = assert(app.params.output)
 local study = app.params.study == 'true'
 local carry = app.params.carry == 'true'
+local combat = app.params.combat == 'true'
+assert(not combat or not study, 'Combat poses use their separate clip')
 assert(not carry or study, 'The carry revision applies only to the walk study')
 assert(not app.fs.isFile(destination), 'Refusing to overwrite an edited source')
 local input = assert(io.open(root..'/brief.json', 'r'))
@@ -209,12 +211,12 @@ local study_legs={
   {{49,55},{40,63},{44,58},{44,68},'air','flat'},
   {{53,56},{51,65},{39,57},{38,68},'air','flat'}
 }
-local function study_walk(i)
+local function study_walk(i, carry_pose)
   local v=study_legs[i]
   local dy=({0,2,0,-2,0,2,0,-2})[i]
   local h=({{54,44},{54,45},{55,43},{56,41},{57,42},{57,43},{56,43},{55,43}})[i]
   local e={h[1],h[2]-5}
-  if carry then
+  if carry or carry_pose then
     h=({{54,47},{54,48},{55,47},{55,46},{54,47},{53,49},{53,48},{54,46}})[i]
     e=({{48,41},{48,43},{48,41},{48,39},{49,41},{49,43},{49,41},{48,39}})[i]
   end
@@ -224,7 +226,7 @@ local function study_walk(i)
     fk=v[1],ff=v[2],bk=v[3],bf=v[4],fmode=v[5],bmode=v[6],
     e=e,h=h,tip={h[1]+9,h[2]-25},be=be,bh=bh,
     wave=({0,1,1,0,0,-1,-1,0})[i]}
-  if carry then
+  if carry or carry_pose then
     p.carry=true
     p.sword_angle=math.rad(({-44,-43,-45,-48,-47,-43,-44,-46})[i])
   end
@@ -262,21 +264,56 @@ local function attack(i)
   local v=attacks[i];local lunge=math.max(0,v[1])
   return {dx=v[1],dy=v[2],e=v[3],h=v[4],tip=v[5],fk={49+lunge,58},ff={52+lunge,68},bk={38,58},bf={33,68},wave=i<5 and -1 or 1,be={36+v[1],39+v[2]},bh={39+v[1],44+v[2]}}
 end
+local function combat_attack(i)
+  local keys={
+    {0,0,{48,41},{54,47},-44},
+    {-1,1,{45,42},{48,36},-130},
+    {-2,1,{41,37},{43,29},-155},
+    {-1,1,{42,35},{44,28},-140},
+    {1,0,{53,37},{55,29},-82},
+    {3,0,{57,34},{61,31},-45},
+    {4,1,{59,36},{64,36},-12},
+    {5,2,{59,40},{64,44},20},
+    {4,2,{55,43},{59,49},35},
+    {3,1,{52,43},{57,49},25},
+    {2,1,{50,43},{56,48},8},
+    {1,0,{49,42},{55,47},-15},
+    {.7,0,{49,42},{55,47},-24},
+    {.3,0,{48,41},{54,47},-36},
+    {0,0,{48,41},{54,47},-44},
+    {0,0,{48,41},{54,47},-44}
+  }
+  local v=keys[i]
+  local p=study_walk(1,true)
+  p.dx=v[1];p.dy=v[2];p.head_dy=p.dy/2;p.e=v[3];p.h=v[4]
+  p.fk={52+p.dx*.5,58+p.dy};p.bk={38+p.dx*.6,58+p.dy}
+  p.fmode='flat';p.bmode='flat'
+  if i>1 and i<15 then
+    p.be={36+p.dx,39+p.dy};p.bh={32+p.dx,45+p.dy}
+    p.wave=i<=7 and -1 or 1
+  end
+  p.sword_angle=math.rad(v[5])
+  local length=math.sqrt(9*9+25*25)
+  p.tip={p.h[1]+math.cos(p.sword_angle)*length,p.h[2]+math.sin(p.sword_angle)*length}
+  assert(math.abs(math.sqrt((p.tip[1]-p.h[1])^2+(p.tip[2]-p.h[2])^2)-length)<.00001)
+  return p
+end
 local count=0
 local ranges={}
 local contacts={}
 local authored_poses={}
 local subdivisions=study and (app.params.inbetweens=='true' and 3 or 1) or 1
 local study_durations={};for i=1,8*subdivisions do study_durations[i]=120/subdivisions end
-for _,clip in ipairs(study and {'walk'} or {'idle','walk','attack'}) do
+local combat_durations={80,50,40,40,30,40,40,40,40,40,50,50,40,40,50,50}
+for _,clip in ipairs(combat and {'attack'} or study and {'walk'} or {'idle','walk','attack'}) do
   local first=count+1
-  for i,ms in ipairs(study and study_durations or brief.clips[clip].durations_ms) do
+  for i,ms in ipairs(combat and combat_durations or study and study_durations or brief.clips[clip].durations_ms) do
     count=count+1
     local frame=count==1 and spr.frames[1] or spr:newEmptyFrame();frame.duration=ms/1000
     local phase=math.floor((i-1)/subdivisions)+1
     local part=(i-1)%subdivisions
-    local p=study and study_between(phase,part/subdivisions) or (clip=='idle' and idle(i) or (clip=='walk' and walk(i) or attack(i)))
-    if study then authored_poses[#authored_poses+1]=p end
+    local p=combat and combat_attack(i) or study and study_between(phase,part/subdivisions) or (clip=='idle' and idle(i) or (clip=='walk' and walk(i) or attack(i)))
+    if study or combat then authored_poses[#authored_poses+1]=p end
     if study then
       local points={}
       for _,entry in ipairs({{'near',p.ff,p.fmode},{'far',p.bf,p.bmode}}) do
