@@ -164,8 +164,10 @@ foot contacts, native rendered pixels in every sample, palette/bounds and identi
 ready/recovery poses. The second build must change nothing.
 
 Review: `generated/benchmarks/sword_duelist/combat-flow/review/index.html`.
-This revision still needs aesthetic acceptance; timings are study choices rather
-than PixelSpark combat rules.
+The user accepted this revision on 2026-10-13. The accepted native source SHA-256 is
+`88414d5cdf925d700719b6454f7643ace327c61bc0edd24c6ea86646efceeff1`.
+Its pixels and timing form the next checkpoint; any changed source needs a new review.
+Timings remain study choices rather than PixelSpark combat rules.
 
 Only reusable MCP code and its update script are transferred to PixelSpark. These
 character studies, Blender sources and review outputs stay in the toolkit repository.

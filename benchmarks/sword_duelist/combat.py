@@ -138,6 +138,10 @@ def main() -> None:
               'attack_seconds':attack_seconds,'markers':markers,'viewport':[640,360],'fps':fps,'user_acceptance':'pending'}
     if args.flow:
         report['previous_attack_unchanged_sha256'] = hashlib.sha256(previous).hexdigest()
+        # Human acceptance belongs to these exact native bytes, never to a later redraw.
+        if report['source_sha256'] == '88414d5cdf925d700719b6454f7643ace327c61bc0edd24c6ea86646efceeff1':
+            report['user_acceptance'] = 'accepted'
+            report['accepted_on'] = '2026-10-13'
     (review/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
     html = HTML.replace('16 drawn attack poses','20 drawn attack poses').replace('0.72-second','0.485-second') if args.flow else HTML
     (review/'index.html').write_text(html,encoding='utf-8')
