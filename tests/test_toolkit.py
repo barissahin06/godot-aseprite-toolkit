@@ -1,6 +1,7 @@
 import importlib.util
 import hashlib
 import json
+import shutil
 import sys
 import tempfile
 import tomllib
@@ -15,6 +16,80 @@ spec.loader.exec_module(toolkit)
 
 
 class ToolkitTests(unittest.TestCase):
+    def test_consumer_allowlist_excludes_art_and_project_configuration(self):
+        paths=[p.as_posix() for p in toolkit.consumer_files().values()]
+        self.assertIn('toolkit.py',paths)
+        self.assertIn('pixelspark-art-mcp/pixelspark_art_mcp/frame_animation.gd',paths)
+        self.assertFalse(any(p.startswith(('benchmarks/','examples/','.github/')) for p in paths))
+        self.assertFalse(any(p.endswith(('.aseprite','.blend','.png','.gif')) for p in paths))
+
+    def test_consumer_update_is_idempotent_and_preserves_local_art(self):
+        with tempfile.TemporaryDirectory(prefix='MCP Türkçe proje ') as folder:
+            source,repo=self.consumer_fixture(Path(folder))
+            local=repo/'drawing.aseprite'
+            local.write_bytes(b'local art')
+            args=type('Args',(),{'repo':str(repo),'target':'tools/mcp'})()
+            files={source/'toolkit.py':Path('toolkit.py')}
+            with patch.object(toolkit,'BASE',source),patch.object(toolkit,'consumer_files',return_value=files):
+                self.assertTrue(toolkit.update(args)['changed'])
+                target=repo/'tools/mcp/toolkit.py'
+                stamp=target.stat().st_mtime_ns
+                self.assertEqual(toolkit.update(args)['changed'],[])
+                self.assertEqual(target.stat().st_mtime_ns,stamp)
+                target.write_bytes(b'local override')
+                with self.assertRaisesRegex(ValueError,'local MCP change'):
+                    toolkit.update(args)
+                self.assertEqual(target.read_bytes(),b'local override')
+            self.assertEqual(local.read_bytes(),b'local art')
+
+    def test_consumer_manifest_cannot_escape_and_dirty_source_is_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source,repo=self.consumer_fixture(Path(folder))
+            args=type('Args',(),{'repo':str(repo),'target':'tools/mcp'})()
+            with patch.object(toolkit,'BASE',source),patch.object(toolkit,'consumer_files',return_value={source/'toolkit.py':Path('toolkit.py')}):
+                toolkit.update(args)
+                file=repo/'tools/mcp/mcp-update.json'
+                data=json.loads(file.read_text())
+                data['files'][0]['path']='../../outside'
+                file.write_text(json.dumps(data))
+                with self.assertRaisesRegex(ValueError,'escapes'):
+                    toolkit.update(args)
+                (source/'toolkit.py').write_text('uncommitted')
+                with self.assertRaisesRegex(ValueError,'Commit and verify'):
+                    toolkit.update(args)
+
+    def test_initial_consumer_change_is_not_overwritten(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source,repo=self.consumer_fixture(Path(folder))
+            target=repo/'tools/mcp/toolkit.py'
+            target.parent.mkdir(parents=True)
+            target.write_text('existing copy\n')
+            toolkit.run(['git','add','.'],repo)
+            toolkit.run(['git','-c','user.name=Toolkit Test','-c','user.email=test@example.invalid','commit','--quiet','-m','consumer fixture'],repo)
+            target.write_text('local change\n')
+            args=type('Args',(),{'repo':str(repo),'target':'tools/mcp'})()
+            with patch.object(toolkit,'BASE',source),patch.object(toolkit,'consumer_files',return_value={source/'toolkit.py':Path('toolkit.py')}):
+                with self.assertRaisesRegex(ValueError,'local MCP changes'):
+                    toolkit.update(args)
+            self.assertEqual(target.read_text(),'local change\n')
+            self.assertFalse((target.parent/'mcp-update.json').exists())
+
+    @staticmethod
+    def consumer_fixture(folder):
+        source,repo=folder/'upstream',folder/'consumer'
+        source.mkdir();repo.mkdir()
+        runtime=source/'aseprite-mcp/aseprite_mcp/core/runtime.py'
+        runtime.parent.mkdir(parents=True)
+        shutil.copyfile(BASE/'aseprite-mcp/aseprite_mcp/core/runtime.py',runtime)
+        (source/'toolkit.py').write_text('upstream code\n')
+        (source/'.gitignore').write_text('.art-operation.lock\n.art-history/\n**/__pycache__/\n')
+        for path in (source,repo):
+            toolkit.run(['git','init','--quiet'],path)
+        toolkit.run(['git','remote','add','origin','https://github.com/example/toolkit.git'],source)
+        toolkit.run(['git','add','.'],source)
+        toolkit.run(['git','-c','user.name=Toolkit Test','-c','user.email=test@example.invalid','commit','--quiet','-m','fixture'],source)
+        return source,repo
+
     def test_setup_preserves_unrelated_config_and_is_idempotent(self):
         original='model = "unchanged"\n\n[mcp_servers.other]\ncommand = "other"\n\n[mcp_servers.aseprite]\ncommand = "old"\n[mcp_servers.aseprite.env]\nASEPRITE_PATH = "old"\n'
         desired=toolkit.settings(Path('repo'),Path('repo/game'),'aseprite','godot','uv')

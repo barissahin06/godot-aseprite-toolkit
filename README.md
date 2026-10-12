@@ -63,5 +63,17 @@ Only named packages, authored examples, tests, setup/docs and CI are copied. sou
 records each SHA-256 and the current upstream commit; initial import provenance is
 kept separately in `imported_from`. A dirty source tree is explicitly marked.
 Repackaging without Git preserves the recorded provenance. Commit sources before distribution.
-Develop here; a PixelSpark consumer updater is a separate release step. Do not copy
-the toolkit's root config, CI or benchmark project over a game's files.
+Develop here. After committing and verifying an upstream revision, update only the
+consumer's MCP packages and setup/update script:
+
+```powershell
+python toolkit.py update --repo "C:/Games/PixelSpark" --target tools/mcp
+```
+
+The update uses an allowlist and records the exact source commit and file hashes in
+`mcp-update.json`. Shared locks, source checkpoints and publication rollback protect
+the consumer. A repeated update changes nothing. Local edits or missing managed files
+stop the update; retired upstream files require review. The first update of an existing
+consumer requires its managed Git files to be clean. Run frozen `uv sync` for each
+package, validate it, then reconnect the servers. Configuration and local environments
+stay intact. Benchmarks, drawings, examples, previews and toolkit CI are not transferred.

@@ -51,9 +51,24 @@ async def main():
                     assert not repeated.get('changed',[]) and not repeated.get('changed_textures',[]) and not repeated.get('changed_views',[]), repeated
                 assert digest(motion)==original_motion
                 assert sources=={p.name:digest(p) for p in (examples/'sources').glob('*.aseprite')}
+                recipe=examples/'recipes/fx.json'
+                config=json.loads(recipe.read_text())
+                config['animations']={'default':{'loop':False,'markers':{'contact':.12,'chain_ready':.24}}}
+                config['required_markers']={'default':['contact','chain_ready']}
+                recipe.write_text(json.dumps(config))
+                await call('build_asset',{'recipe_path':'examples/recipes/fx.json'})
+                repeated=await call('build_asset',{'recipe_path':'examples/recipes/fx.json'})
+                assert not repeated['changed'],repeated
                 await call('import_godot_assets',{})
                 for kind,scene in scenes.items():
                     await call('inspect_godot_scene',{'scene':scene,'report_path':f'generated/{kind}-inspection.json'})
+                clips=await call('inspect_godot_scene',{'scene':scenes['fx']})
+                clip=clips['animations'][0]
+                assert not clip['loop'] and abs(clip['seconds']-.36)<.0001
+                assert abs(clip['markers']['contact']-.12)<.0001 and abs(clip['markers']['chain_ready']-.24)<.0001
+                shutil.copyfile(Path(__file__).with_name('frame_playback.gd'),project/'frame_playback.gd')
+                playback=await call('run_godot_script',{'script_path':'examples/project/frame_playback.gd','arguments':[scenes['fx']]})
+                assert 'FRAME_PLAYBACK_OK' in playback['log']
                 await call('edit_animation',{'library_path':'examples/project/rig/motion.tres','clip':'attack','patch':{'markers':{'other':0.3}}},True)
                 assert digest(motion)==original_motion
                 await call('edit_animation',{'library_path':'examples/project/rig/motion.tres','clip':'attack','patch':{'tracks':[{'path':'Skeleton2D/root/body/weapon:rotation','keys':[[0.3,-0.8]],'interpolation':'linear'}],'markers':{'contact':0.32}}})

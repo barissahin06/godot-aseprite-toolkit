@@ -35,6 +35,28 @@ Version 1, workspace-relative source/output paths. Output must stay in ART_PROJE
 - ui_atlas: source/output/asset_id, optional margins [left,top,right,bottom]; atlas views and nine-patch preview.
 - layered_scene: source/output/asset_id and unique {name,z_index} layers with their own frame animation.
 
+Sprite recipes can add `animations`, mapping tag names to `loop` (boolean) and
+`markers` (names mapped to seconds). For example:
+
+```json
+{
+  "animations": {
+    "walk": { "loop": true },
+    "attack": {
+      "loop": false,
+      "markers": { "contact": 0.28, "chain_ready": 0.54 }
+    }
+  },
+  "required_markers": { "attack": ["contact", "chain_ready"] }
+}
+```
+
+This emits a native AnimationLibrary and AnimationPlayer with discrete frame keys,
+the original per-frame durations, loop modes and named markers. Play a clip through
+that AnimationPlayer; its tracks select the matching SpriteFrames animation.
+Markers outside a clip or at colliding times, unknown tags and invalid settings fail
+before publication. Recipes without `animations` keep their existing playback behavior.
+
 build_asset(recipe_path) validates in staged Godot before publication. It returns scene as
 res:// for all kinds; the legacy rig API keeps its original repo-relative scene result.
 Content-addressed PNGs and stable views prevent unnecessary rewrites. Old image revisions remain
