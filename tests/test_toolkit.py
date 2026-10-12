@@ -76,6 +76,8 @@ class ToolkitTests(unittest.TestCase):
 
     @staticmethod
     def consumer_fixture(folder):
+        # Windows runners can expose TEMP through an 8.3 alias; compare canonical paths.
+        folder=folder.resolve()
         source,repo=folder/'upstream',folder/'consumer'
         source.mkdir();repo.mkdir()
         runtime=source/'aseprite-mcp/aseprite_mcp/core/runtime.py'
