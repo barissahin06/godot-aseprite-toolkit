@@ -4,6 +4,8 @@ local destination = assert(app.params.output)
 local study = app.params.study == 'true'
 local carry = app.params.carry == 'true'
 local combat = app.params.combat == 'true'
+local flow = app.params.flow == 'true'
+assert(not flow or combat, 'Flow poses belong to the combat study')
 assert(not combat or not study, 'Combat poses use their separate clip')
 assert(not carry or study, 'The carry revision applies only to the walk study')
 assert(not app.fs.isFile(destination), 'Refusing to overwrite an edited source')
@@ -284,11 +286,43 @@ local function combat_attack(i)
     {0,0,{48,41},{54,47},-44}
   }
   local v=keys[i]
+  if flow then
+    -- Continuous hand arc; the shoulder leads the strike and the blade trails recovery.
+    local flowing={
+      {0,0,{48,41},{54,47},-44},
+      {-.2,.2,{48,40},{54,45},-52},
+      {-.5,.5,{47,38},{52,41},-68},
+      {-1,1,{45,35},{49,37},-87},
+      {-1.5,1.2,{42,33},{46,34},-105},
+      {-1.8,1.2,{42,33},{45,32},-116},
+      {-1.2,.7,{45,32},{47,30},-108},
+      {0,0,{49,33},{51,30},-83},
+      {2,0,{54,32},{57,32},-50},
+      {4,1,{58,35},{62,35},-22},
+      {5,2,{60,40},{65,41},12},
+      {5.5,2,{59,44},{64,47},39},
+      {5,1.8,{56,46},{61,50},51},
+      {4,1.5,{53,45},{58,51},40},
+      {3,1,{51,44},{56,50},22},
+      {2,.7,{50,43},{55,49},1},
+      {1,.4,{49,42},{55,48},-16},
+      {.5,.2,{48,42},{54,48},-29},
+      {.2,0,{48,41},{54,47},-40},
+      {0,0,{48,41},{54,47},-44}
+    }
+    v=assert(flowing[i])
+  end
   local p=study_walk(1,true)
   p.dx=v[1];p.dy=v[2];p.head_dy=p.dy/2;p.e=v[3];p.h=v[4]
   p.fk={52+p.dx*.5,58+p.dy};p.bk={38+p.dx*.6,58+p.dy}
   p.fmode='flat';p.bmode='flat'
-  if i>1 and i<15 then
+  if flow then
+    local counter={0,.2,.5,1,1.5,1.8,1.2,0,-1,-2,-3,-3.5,-3,-2,-1,0,.3,.2,.1,0}
+    local lag={0,0,0,-.2,-.5,-.8,-1,-1,-.5,0,.5,1,1,1,.7,.4,.2,0,0,0}
+    p.be={44+p.dx*.5+counter[i],40+p.dy}
+    p.bh={49+p.dx*.5+counter[i],45+p.dy}
+    p.wave=lag[i]
+  elseif i>1 and i<15 then
     p.be={36+p.dx,39+p.dy};p.bh={32+p.dx,45+p.dy}
     p.wave=i<=7 and -1 or 1
   end
@@ -305,6 +339,7 @@ local authored_poses={}
 local subdivisions=study and (app.params.inbetweens=='true' and 3 or 1) or 1
 local study_durations={};for i=1,8*subdivisions do study_durations[i]=120/subdivisions end
 local combat_durations={80,50,40,40,30,40,40,40,40,40,50,50,40,40,50,50}
+if flow then combat_durations={30,25,25,25,25,25,20,20,20,20,20,20,25,25,30,30,25,25,25,25} end
 for _,clip in ipairs(combat and {'attack'} or study and {'walk'} or {'idle','walk','attack'}) do
   local first=count+1
   for i,ms in ipairs(combat and combat_durations or study and study_durations or brief.clips[clip].durations_ms) do

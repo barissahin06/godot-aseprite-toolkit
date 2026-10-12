@@ -7,13 +7,15 @@ func _initialize() -> void:
 
 func capture() -> void:
 	var args := OS.get_cmdline_user_args()
-	assert(args.size() == 2 or args.size() == 3)
+	assert(args.size() >= 2 and args.size() <= 4)
 	var output: String = args[0]
 	var count: int = int(args[1])
+	var fps: int = int(args[3]) if args.size() == 4 else 30
 	assert(count > 0 and count <= 300)
+	assert(fps >= 20 and fps <= 60)
 	root.size = Vector2i(640, 360)
 	root.content_scale_size = root.size
-	var scene: String = args[2] if args.size() == 3 else "res://compare.tscn"
+	var scene: String = args[2] if args.size() >= 3 else "res://compare.tscn"
 	var packed := load(scene) as PackedScene
 	assert(packed != null)
 	for light: bool in [false, true]:
@@ -26,7 +28,7 @@ func capture() -> void:
 			subject.set_process(false)
 			subject.set_view(light, mirrored)
 			for index: int in count:
-				subject.set_review_time(float(index) / 30.0)
+				subject.set_review_time(float(index) / float(fps))
 				await process_frame
 				RenderingServer.force_draw(false)
 				var picture: Image = root.get_texture().get_image()

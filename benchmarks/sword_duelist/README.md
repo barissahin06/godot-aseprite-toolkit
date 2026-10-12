@@ -141,7 +141,31 @@ keys with exact authored durations. These timings are study choices, not game ru
 Review: `generated/benchmarks/sword_duelist/combat-study/review/index.html`.
 Its walk/ready/attack/ready sequence repeats only in the review. Native Godot renders
 are checked against source pixels; normal speed, both directions and light/dark
-backgrounds are available. Attack aesthetics await user approval.
+backgrounds are available. The user found this attack's preparation/recovery
+artificial and its preview pauses too long. It remains the comparison baseline.
+
+## Continuous attack revision
+
+`aseprite/combat_flow.aseprite` keeps the same accepted 24-frame walk and adds a
+separate 20-pose attack. Preparation follows a continuous hand/blade arc, the torso
+shifts weight into the strike, the free arm counters it and the scarf trails it.
+Recovery passes below the hand before returning to the same low ready pose.
+The original attack source is kept unchanged for before/after comparison.
+
+```powershell
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/combat.py --flow
+```
+
+The single attack lasts 0.485 seconds, with `contact` at 0.235 and `chain_ready`
+at 0.410. Preview holds before/after the attack are 0.08/0.10 seconds, rather than
+0.24/0.48. Godot capture uses 50 fps to sample all drawn poses without pixel blending;
+GIF timing is 20 ms. The build checks preserved walk pixels/timing/pivots, 40 planted
+foot contacts, native rendered pixels in every sample, palette/bounds and identical
+ready/recovery poses. The second build must change nothing.
+
+Review: `generated/benchmarks/sword_duelist/combat-flow/review/index.html`.
+This revision still needs aesthetic acceptance; timings are study choices rather
+than PixelSpark combat rules.
 
 Only reusable MCP code and its update script are transferred to PixelSpark. These
 character studies, Blender sources and review outputs stay in the toolkit repository.

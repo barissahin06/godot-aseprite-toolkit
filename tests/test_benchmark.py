@@ -30,6 +30,17 @@ finally:
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_flow_attack_contact_recovery_and_short_preview_holds(self):
+        self.assertEqual(sum(combat.FLOW_DURATIONS),485)
+        self.assertEqual(combat.review_frame(.96,True),24)
+        self.assertEqual(combat.review_frame(1.04,True),24)
+        self.assertEqual(combat.review_frame(1.274,True),33)
+        self.assertEqual(combat.review_frame(1.275,True),34)
+        self.assertEqual(combat.review_frame(1.45,True),41)
+        self.assertEqual(combat.review_frame(1.524,True),43)
+        self.assertEqual(combat.review_frame(1.525,True),24)
+        self.assertEqual(combat.review_frame(1.625,True),0)
+
     def test_combat_review_contact_and_ready_boundaries(self):
         self.assertEqual(sum(combat.DURATIONS),720)
         self.assertEqual(combat.review_frame(.95),23)

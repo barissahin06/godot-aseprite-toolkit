@@ -1,6 +1,8 @@
 extends Node2D
 
 const ANCHOR: Vector2 = Vector2(44, 70)
+@export var asset_id: String = "combat_study"
+@export var flow: bool = false
 var actors: Array[Node2D] = []
 var elapsed: float = 0.0
 var phase: float = 0.0
@@ -13,7 +15,7 @@ var clip_time: float = 0.0
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var packed: PackedScene = load("res://assets/combat_study/combat_study.tscn")
+	var packed: PackedScene = load("res://assets/%s/%s.tscn" % [asset_id, asset_id])
 	for scale_factor: int in [1, 3]:
 		var actor: Node2D = packed.instantiate()
 		actor.scale = Vector2.ONE * scale_factor
@@ -29,27 +31,32 @@ func _process(delta: float) -> void:
 
 
 func set_review_time(seconds: float) -> void:
-	phase = fposmod(seconds, 2.4)
+	var player: AnimationPlayer = actors[0].get_node("AnimationPlayer")
+	var attack: Animation = player.get_animation("attack")
+	var attack_start: float = 1.04 if flow else 1.2
+	var attack_end: float = attack_start + attack.length
+	var cycle: float = attack_end + 0.1 if flow else 2.4
+	phase = fposmod(seconds, cycle)
 	active_clip = &"ready"
 	clip_time = 0.0
 	if phase < 0.96 - 0.00001:
 		active_clip = &"walk"
 		clip_time = phase
-	elif phase >= 1.2 - 0.00001 and phase < 1.92 - 0.00001:
+	elif phase >= attack_start - 0.00001 and phase < attack_end - 0.00001:
 		active_clip = &"attack"
-		clip_time = maxf(0.0, phase - 1.2)
+		clip_time = maxf(0.0, phase - attack_start)
 	distance = mini(24, floori(phase / 0.04 + 0.00001)) * 2
 	var origin_x: float = 48.0 - ANCHOR.x
 	var offset := Vector2(-origin_x if mirrored else origin_x, 40 - ANCHOR.y)
 	var origins: Array[Vector2] = [Vector2(148, 230), Vector2(450, 256)]
 	for index: int in actors.size():
 		var actor: Node2D = actors[index]
-		var sprite: AnimatedSprite2D = actor.get_node("combat_study")
-		var player: AnimationPlayer = actor.get_node("AnimationPlayer")
+		var sprite: AnimatedSprite2D = actor.get_node(asset_id)
+		var actor_player: AnimationPlayer = actor.get_node("AnimationPlayer")
 		sprite.flip_h = mirrored
 		actor.position = origins[index] + offset * actor.scale.x
-		player.play(active_clip)
-		player.seek(clip_time, true)
+		actor_player.play(active_clip)
+		actor_player.seek(clip_time, true)
 	queue_redraw()
 
 
@@ -90,15 +97,20 @@ func _draw() -> void:
 			x += 24 * factor
 	var player: AnimationPlayer = actors[0].get_node("AnimationPlayer")
 	var clip: Animation = player.get_animation("attack")
+	var attack_start: float = 1.04 if flow else 1.2
+	var cycle: float = attack_start + clip.length + 0.1 if flow else 2.4
 	for marker: StringName in clip.get_marker_names():
-		var x: float = 20 + (1.2 + clip.get_marker_time(marker)) / 2.4 * 600
+		var x: float = 20 + (attack_start + clip.get_marker_time(marker)) / cycle * 600
 		draw_line(Vector2(x, 303), Vector2(x, 318), Color("e4a34d"), 2.0)
 	draw_line(Vector2(20, 310), Vector2(620, 310), ink.darkened(0.5), 1.0)
-	draw_circle(Vector2(20 + phase / 2.4 * 600, 310), 3, ink)
+	draw_circle(Vector2(20 + phase / cycle * 600, 310), 3, ink)
 	draw_string(
 		font,
 		Vector2(20, 343),
-		"Single attack / 0.72 s / contact 0.28 / chain ready 0.54",
+		(
+			"Single attack / %.3f s / contact %.3f / chain ready %.3f"
+			% [clip.length, clip.get_marker_time(&"contact"), clip.get_marker_time(&"chain_ready")]
+		),
 		HORIZONTAL_ALIGNMENT_LEFT,
 		-1,
 		12,
