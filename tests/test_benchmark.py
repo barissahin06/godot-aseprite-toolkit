@@ -1,4 +1,5 @@
 import importlib.util
+import copy
 import json
 import sys
 import tempfile
@@ -15,11 +16,36 @@ try:
     study_spec = importlib.util.spec_from_file_location("walk_study", BASE / "benchmarks/sword_duelist/walk_study.py")
     study = importlib.util.module_from_spec(study_spec)
     study_spec.loader.exec_module(study)
+    detail_spec = importlib.util.spec_from_file_location("detail", BASE / "benchmarks/sword_duelist/detail.py")
+    detail = importlib.util.module_from_spec(detail_spec)
+    detail_spec.loader.exec_module(detail)
 finally:
     sys.path.pop(0)
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_material_finish_preserves_shape_and_rejects_timing_changes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            before,after = Path(folder)/'before.png',Path(folder)/'after.png'
+            original = Image.new('RGBA',(16,8))
+            finished = Image.new('RGBA',(16,8))
+            for frame in range(2):
+                for y in range(1,7):
+                    for x in range(1,7):
+                        original.putpixel((frame*8+x,y),(68,86,107,255))
+                        finished.putpixel((frame*8+x,y),(118,139,150,255))
+            original.save(before);finished.save(after)
+            metadata={'frames':[{'duration':40,'frame':{'x':i*8,'y':0,'w':8,'h':8},'sourceSize':{'w':8,'h':8}} for i in range(2)],
+                      'meta':{'frameTags':[{'name':'walk','from':0,'to':1}], 'slices':[{'name':'ground'}]}}
+            self.assertEqual(detail.verify_finish(before,after,metadata,metadata),[36,36])
+            changed=copy.deepcopy(metadata)
+            changed['frames'][0]['duration']=80
+            with self.assertRaisesRegex(AssertionError,'timing'):
+                detail.verify_finish(before,after,metadata,changed)
+            finished.putpixel((0,0),(118,139,150,255));finished.save(after)
+            with self.assertRaisesRegex(AssertionError,'Silhouette'):
+                detail.verify_finish(before,after,metadata,metadata)
+
     def test_contact_frame_boundary_and_recovery_hold(self):
         durations = benchmark.BRIEF["clips"]["attack"]["durations_ms"]
         self.assertEqual(benchmark.selected_frame(0.279, durations), 4)

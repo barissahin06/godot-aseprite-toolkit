@@ -71,6 +71,29 @@ Its root motion advances two native pixels per authored 40 ms frame, totaling
 pixels. The world preview resets its path when the captured GIF repeats.
 
 Review: `generated/benchmarks/sword_duelist/walk-study/review/index.html`.
-Contact metrics validate the explicit authored model, not gait quality or integration
-with a game's movement controller. This refinement still requires visual acceptance;
-the general MCP drawing API and PixelSpark assets are not changed by the study.
+Contact metrics validate the explicit authored model, not integration with a game's
+movement controller. The user accepted this movement as the basis for the next
+drawing pass; this is not approval of a production game asset. The general MCP
+drawing API and PixelSpark assets are not changed by the study.
+
+## Separate material finish
+
+`aseprite/walk_detail.aseprite` adds a sixth `Material finish` layer over the accepted
+walk: helmet planes, plate edges, scarf and coat folds, leather accents and quieter
+rear limbs. The five original layers, silhouette, contacts, pivots and frame timings
+stay unchanged. `walk_study.aseprite` and `walk_motion.json` remain the baseline.
+
+```powershell
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/detail.py
+uv run --directory pixelspark-art-mcp --frozen python ../benchmarks/sword_duelist/walk_study.py --detail
+```
+
+The first command checks the native source and reports per-frame color changes and
+unchanged original layers. It does not redraw an existing finished source. Explicit
+`detail.py --redraw` checkpoints it before replacing only the finish study in a staged
+publication. The second command builds twice and captures the same Godot views as
+the baseline, with native and nearest before/after previews in both directions and
+on both backgrounds. It verifies saved baseline renders against the accepted source.
+
+Review: `generated/benchmarks/sword_duelist/walk-detail/review/index.html`.
+The finish awaits user visual acceptance; no gameplay integration is included.

@@ -243,6 +243,7 @@ end
 local count=0
 local ranges={}
 local contacts={}
+local authored_poses={}
 local subdivisions=study and (app.params.inbetweens=='true' and 3 or 1) or 1
 local study_durations={};for i=1,8*subdivisions do study_durations[i]=120/subdivisions end
 for _,clip in ipairs(study and {'walk'} or {'idle','walk','attack'}) do
@@ -253,6 +254,7 @@ for _,clip in ipairs(study and {'walk'} or {'idle','walk','attack'}) do
     local phase=math.floor((i-1)/subdivisions)+1
     local part=(i-1)%subdivisions
     local p=study and study_between(phase,part/subdivisions) or (clip=='idle' and idle(i) or (clip=='walk' and walk(i) or attack(i)))
+    if study then authored_poses[#authored_poses+1]=p end
     if study then
       local points={}
       for _,entry in ipairs({{'near',p.ff,p.fmode},{'far',p.bf,p.bmode}}) do
@@ -287,4 +289,7 @@ if study then
   if app.params.motion then local file=assert(io.open(app.params.motion,'w'));file:write(json.encode(motion));file:close() end
 end
 spr:saveAs(destination);spr:close()
+if app.params.poses then
+  local file=assert(io.open(app.params.poses,'w'));file:write(json.encode(authored_poses));file:close()
+end
 print('DUELIST_AUTHORED '..count)
