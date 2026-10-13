@@ -1,0 +1,182 @@
+{
+  "anchor": [44, 70],
+  "cycle_seconds": 0.95999999999999996,
+  "poses": [
+    {
+      "contacts": [
+        { "foot": "near", "mode": "heel", "pixel": [54, 69] },
+        { "foot": "far", "mode": "toe", "pixel": [37, 69] }
+      ],
+      "duration_ms": 40,
+      "frame": 0,
+      "key": true,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "heel", "pixel": [52, 69] }],
+      "duration_ms": 40,
+      "frame": 1,
+      "key": false,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "heel", "pixel": [50, 69] }],
+      "duration_ms": 40,
+      "frame": 2,
+      "key": false,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [55, 69] }],
+      "duration_ms": 40,
+      "frame": 3,
+      "key": true,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [53, 69] }],
+      "duration_ms": 40,
+      "frame": 4,
+      "key": false,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [51, 69] }],
+      "duration_ms": 40,
+      "frame": 5,
+      "key": false,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [49, 69] }],
+      "duration_ms": 40,
+      "frame": 6,
+      "key": true,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [47, 69] }],
+      "duration_ms": 40,
+      "frame": 7,
+      "key": false,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [45, 69] }],
+      "duration_ms": 40,
+      "frame": 8,
+      "key": false,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [43, 69] }],
+      "duration_ms": 40,
+      "frame": 9,
+      "key": true,
+      "phase": "up"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [41, 69] }],
+      "duration_ms": 40,
+      "frame": 10,
+      "key": false,
+      "phase": "up"
+    },
+    {
+      "contacts": [{ "foot": "near", "mode": "flat", "pixel": [39, 69] }],
+      "duration_ms": 40,
+      "frame": 11,
+      "key": false,
+      "phase": "up"
+    },
+    {
+      "contacts": [
+        { "foot": "near", "mode": "toe", "pixel": [37, 69] },
+        { "foot": "far", "mode": "heel", "pixel": [54, 69] }
+      ],
+      "duration_ms": 40,
+      "frame": 12,
+      "key": true,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "heel", "pixel": [52, 69] }],
+      "duration_ms": 40,
+      "frame": 13,
+      "key": false,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "heel", "pixel": [50, 69] }],
+      "duration_ms": 40,
+      "frame": 14,
+      "key": false,
+      "phase": "contact"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [55, 69] }],
+      "duration_ms": 40,
+      "frame": 15,
+      "key": true,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [53, 69] }],
+      "duration_ms": 40,
+      "frame": 16,
+      "key": false,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [51, 69] }],
+      "duration_ms": 40,
+      "frame": 17,
+      "key": false,
+      "phase": "down"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [49, 69] }],
+      "duration_ms": 40,
+      "frame": 18,
+      "key": true,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [47, 69] }],
+      "duration_ms": 40,
+      "frame": 19,
+      "key": false,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [45, 69] }],
+      "duration_ms": 40,
+      "frame": 20,
+      "key": false,
+      "phase": "passing"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [43, 69] }],
+      "duration_ms": 40,
+      "frame": 21,
+      "key": true,
+      "phase": "up"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [41, 69] }],
+      "duration_ms": 40,
+      "frame": 22,
+      "key": false,
+      "phase": "up"
+    },
+    {
+      "contacts": [{ "foot": "far", "mode": "flat", "pixel": [39, 69] }],
+      "duration_ms": 40,
+      "frame": 23,
+      "key": false,
+      "phase": "up"
+    }
+  ],
+  "stride_pixels": 48,
+  "velocity_pixels_per_second": 50
+}

@@ -19,4 +19,4 @@ include = ["pixelspark_art_mcp*"]
 pixelspark_art_mcp = ["*.gd", "*.lua"]
 
 [tool.uv.sources]
-aseprite-mcp = { path = "../aseprite-mcp" }
+aseprite-mcp = { path = "../aseprite-mcp", editable = true }

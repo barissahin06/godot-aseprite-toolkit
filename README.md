@@ -1,8 +1,8 @@
 # Godot–Aseprite toolkit
 
-Windows-first Codex tools. PixelSpark keeps development sources here; the private
-barissahin06/godot-aseprite-toolkit repository receives a hash-verified distribution.
-The standalone toolkit needs no game files.
+Windows-first Codex tools. The private barissahin06/godot-aseprite-toolkit repository
+is the development upstream. PixelSpark consumes tested versions; the toolkit needs
+no game files. The initial import's provenance is retained in source-manifest.json.
 
 ## Project installation
 
@@ -41,6 +41,11 @@ The bridge adds batch_edit_sprite, edit_animation, build_asset and review_asset.
 See its README for contracts. Four independent examples cover rig, FX, UI atlas and layered environment.
 Their authored motion is kept; derived textures/scenes/caches are excluded from distribution.
 
+The [sword duelist benchmark](benchmarks/sword_duelist/README.md) compares native
+Aseprite poses with a real Blender rig rendered to pixels and retouched in Aseprite.
+It includes editable sources and an identical Godot review; the geometric examples
+remain technical fixtures rather than art quality targets.
+
 ## Verification and distribution
 
 ```powershell
@@ -55,5 +60,20 @@ Native acceptance uses temporary copies, Unicode/spaces and real MCP/app calls. 
 contracts and actual wheels. Aseprite native acceptance needs the licensed local app;
 Linux/macOS native behavior is unverified. The destination must be empty and separate.
 Only named packages, authored examples, tests, setup/docs and CI are copied. source-manifest.json
-records each SHA-256 and PixelSpark commit. Commit sources before distribution; update by export,
-not independent edits to the distribution copy.
+records each SHA-256 and the current upstream commit; initial import provenance is
+kept separately in `imported_from`. A dirty source tree is explicitly marked.
+Repackaging without Git preserves the recorded provenance. Commit sources before distribution.
+Develop here. After committing and verifying an upstream revision, update only the
+consumer's MCP packages and setup/update script:
+
+```powershell
+python toolkit.py update --repo "C:/Games/PixelSpark" --target tools/mcp
+```
+
+The update uses an allowlist and records the exact source commit and file hashes in
+`mcp-update.json`. Shared locks, source checkpoints and publication rollback protect
+the consumer. A repeated update changes nothing. Local edits or missing managed files
+stop the update; retired upstream files require review. The first update of an existing
+consumer requires its managed Git files to be clean. Run frozen `uv sync` for each
+package, validate it, then reconnect the servers. Configuration and local environments
+stay intact. Benchmarks, drawings, examples, previews and toolkit CI are not transferred.

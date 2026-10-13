@@ -40,6 +40,7 @@ func walk(node: Node, root_node: Node, report: Dictionary) -> void:
 				"player": str(root_node.get_path_to(node)),
 				"name": name,
 				"seconds": clip.length,
+				"loop": clip.loop_mode != Animation.LOOP_NONE,
 				"tracks": [],
 				"markers": {}
 			}

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -31,27 +32,56 @@ def frame_resource(texture: str, frame: dict) -> str:
             'region = Rect2(%s)\n' % (frame["index"], ", ".join(str(rect[k]) for k in ("x", "y", "w", "h"))))
 
 
-def sprite_frames(texture: str, data: dict) -> str:
+def animation_specs(data: dict, options: dict | None = None) -> list[dict]:
+    source = frames(data)
+    tags = data.get("meta", {}).get("frameTags") or [{"name": "default", "from": 0, "to": len(source)-1}]
+    configured = options is not None
+    options = {} if options is None else options
+    if not isinstance(options, dict) or set(options) - {tag['name'] for tag in tags}:
+        raise ValueError('Animation settings must name existing frame tags')
+    result = []
+    names = set()
+    for tag in tags:
+        name, lo, hi = tag['name'], tag['from'], tag['to']
+        if not isinstance(name, str) or not name or (configured and not NAME.fullmatch(name)) or name in names:
+            raise ValueError('Frame tags need unique safe names')
+        names.add(name)
+        if isinstance(lo, bool) or isinstance(hi, bool) or not isinstance(lo, int) or not isinstance(hi, int) or not 0 <= lo <= hi < len(source):
+            raise ValueError('Invalid frame tag')
+        order = list(range(lo, hi+1))
+        if tag.get('direction') == 'reverse':
+            order.reverse()
+        elif tag.get('direction') == 'pingpong':
+            order += order[-2:0:-1]
+        elif tag.get('direction', 'forward') != 'forward':
+            raise ValueError('Unsupported tag direction')
+        settings = options.get(name, {})
+        if not isinstance(settings, dict) or set(settings) - {'loop', 'markers'}:
+            raise ValueError('Unsupported animation settings')
+        loop, markers = settings.get('loop', True), settings.get('markers', {})
+        seconds = sum(source[i]['duration'] for i in order) / 1000
+        if not isinstance(loop, bool) or not isinstance(markers, dict):
+            raise ValueError('Expected boolean loop and marker map')
+        for marker, time in markers.items():
+            if not isinstance(marker, str) or not NAME.fullmatch(marker) or isinstance(time, bool) or not isinstance(time, (int, float)) or not math.isfinite(time) or not 0 <= time <= seconds:
+                raise ValueError('Invalid animation marker name/time')
+        if len(set(markers.values())) != len(markers):
+            raise ValueError('Animation marker times collide')
+        result.append({'name': name, 'indices': order, 'durations': [source[i]['duration']/1000 for i in order],
+                       'seconds': seconds, 'loop': loop, 'markers': markers})
+    return result
+
+
+def sprite_frames(texture: str, data: dict, options: dict | None = None) -> str:
     source = frames(data)
     output = [f'[gd_resource type="SpriteFrames" load_steps={len(source)+2} format=3]\n',
               f'[ext_resource type="Texture2D" path={quoted(texture)} id="sheet"]\n']
     for index, frame in enumerate(source):
         output.append(frame_resource(texture, {**frame, "index": index}))
-    tags = data.get("meta", {}).get("frameTags") or [{"name": "default", "from": 0, "to": len(source)-1}]
     animations = []
-    for tag in tags:
-        lo, hi = tag["from"], tag["to"]
-        if not isinstance(lo, int) or not isinstance(hi, int) or not 0 <= lo <= hi < len(source):
-            raise ValueError("Invalid frame tag")
-        order = list(range(lo, hi+1))
-        if tag.get("direction") == "reverse":
-            order.reverse()
-        elif tag.get("direction") == "pingpong":
-            order += order[-2:0:-1]
-        elif tag.get("direction", "forward") != "forward":
-            raise ValueError("Unsupported tag direction")
-        values = ', '.join('{"duration": %s, "texture": SubResource("frame_%d")}' % (source[i]["duration"] / 1000, i) for i in order)
-        animations.append('{"name": &%s, "speed": 1.0, "loop": true, "frames": [%s]}' % (quoted(tag["name"]), values))
+    for clip in animation_specs(data, options):
+        values = ', '.join('{"duration": %s, "texture": SubResource("frame_%d")}' % (source[i]["duration"] / 1000, i) for i in clip['indices'])
+        animations.append('{"name": &%s, "speed": 1.0, "loop": %s, "frames": [%s]}' % (quoted(clip['name']), str(clip['loop']).lower(), values))
     output.append('[resource]\nanimations = [%s]\n' % ', '.join(animations))
     return '\n'.join(output)
 
@@ -91,7 +121,8 @@ def quality(sheet: Path, data: dict, expected_palette: list[str] | None = None) 
 
 def validate_staged(project: Path, scene: str, godot: str, required_markers: dict | None = None) -> None:
     (project / "project.godot").write_text('config_version=5\n[rendering]\nrenderer/rendering_method="gl_compatibility"\ntextures/default_filters/use_nearest_mipmap_filter=false\n', encoding="utf-8")
-    run_native(godot, ["--headless", "--path", str(project), "--editor", "--import"], project)
+    # Let the editor finish its background startup work before teardown (Godot 4.6.3).
+    run_native(godot, ["--headless", "--path", str(project), "--editor", "--import", "--quit-after", "120"], project)
     report = project / "inspection.json"
     result = run_native(godot, ["--headless", "--path", str(project), "--script", str(Path(__file__).with_name("inspect.gd")), "--", scene, str(report)], project)
     if "INSPECT_OK" not in result["log"]:
@@ -113,6 +144,8 @@ def build(root: Path, project: Path, recipe_path: str, aseprite: str, godot: str
         return result
     if kind not in {"sprite", "ui_atlas", "layered_scene"} or recipe.get("version") != 1:
         raise ValueError("Unsupported asset recipe version/kind")
+    if 'animations' in recipe and kind != 'sprite':
+        raise ValueError('AnimationLibrary settings are supported for sprite recipes')
     asset_id = recipe.get("asset_id", "")
     if not isinstance(asset_id, str) or not NAME.fullmatch(asset_id):
         raise ValueError("asset_id must be a safe identifier")
@@ -155,17 +188,29 @@ def build(root: Path, project: Path, recipe_path: str, aseprite: str, godot: str
                     raise ValueError('Invalid nine-patch margins')
                 nodes.append('[node name="Preview" type="NinePatchRect" parent="."]\ntexture = ExtResource("0")\ntexture_filter = 1\noffset_left = -32.0\noffset_top = -16.0\noffset_right = 32.0\noffset_bottom = 16.0\n'+''.join(f'patch_margin_{side} = {value}\n' for side,value in zip(('left','top','right','bottom'), margins)))
             else:
-                (exported / (name+'.tres')).write_text(sprite_frames(texture, data), encoding='utf-8')
+                options = recipe.get('animations')
+                (exported / (name+'.tres')).write_text(sprite_frames(texture, data, options), encoding='utf-8')
                 resources.append(f'[ext_resource type="SpriteFrames" path={quoted("res://"+(relative/(name+".tres")).as_posix())} id="{index}"]')
                 z = layer.get('z_index', index)
                 if not isinstance(z,int) or isinstance(z,bool) or not -4096 <= z <= 4096:
                     raise ValueError('Invalid layer z_index')
                 tag = data.get('meta',{}).get('frameTags', [{'name':'default'}])[0]['name']
-                nodes.append(f'[node name={quoted(name)} type="AnimatedSprite2D" parent="."]\nz_index = {z}\ntexture_filter = 1\nsprite_frames = ExtResource("{index}")\nanimation = &{quoted(tag)}\nautoplay = {quoted(tag)}\n')
+                nodes.append(f'[node name={quoted(name)} type="AnimatedSprite2D" parent="."]\nz_index = {z}\ntexture_filter = 1\nsprite_frames = ExtResource("{index}")\nanimation = &{quoted(tag)}\nautoplay = {quoted(tag) if options is None else quoted("")}\n')
+                if options is not None:
+                    settings = exported/(name+'.animation.json')
+                    settings.write_text(json.dumps({'node': name, 'clips': animation_specs(data, options)}), encoding='utf-8')
+                    library = exported/(name+'.animations.tres')
+                    (stage/'project.godot').write_text('config_version=5\n', encoding='utf-8')
+                    result = run_native(godot, ['--headless', '--path', str(stage), '--script', str(Path(__file__).with_name('frame_animation.gd')), '--', str(settings), str(library)], root)
+                    if 'FRAME_ANIMATIONS_OK' not in result['log']:
+                        raise RuntimeError('Incomplete frame animation export')
+                    resources.append(f'[ext_resource type="AnimationLibrary" path={quoted("res://"+library.relative_to(stage).as_posix())} id="motion"]')
+                    nodes.append('[node name="AnimationPlayer" type="AnimationPlayer" parent="."]\nlibraries = {&"": ExtResource("motion")}\nautoplay = '+quoted(tag)+'\n')
+                    settings.unlink()
         scene = exported / (asset_id+'.tscn')
         scene.write_text(f'[gd_scene load_steps={len(resources)+1} format=3]\n\n'+'\n'.join(resources)+f'\n\n[node name={quoted(asset_id)} type="Node2D"]\ntexture_filter = 1\n\n'+'\n'.join(nodes), encoding='utf-8')
         scene_resource = 'res://'+scene.relative_to(stage).as_posix()
-        validate_staged(stage, scene_resource, godot)
+        validate_staged(stage, scene_resource, godot, recipe.get('required_markers'))
         for path in exported.rglob('*'):
             if path.is_file() and path.suffix in {'.png', '.tres', '.tscn', '.json'}:
                 writes[project/path.relative_to(stage)] = path.read_bytes()

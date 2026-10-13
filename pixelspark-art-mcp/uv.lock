@@ -42,7 +42,7 @@ wheels = [
 [[package]]
 name = "aseprite-mcp"
 version = "0.2.0"
-source = { directory = "../aseprite-mcp" }
+source = { editable = "../aseprite-mcp" }
 dependencies = [
     { name = "mcp", extra = ["cli"] },
     { name = "pillow" },
@@ -426,7 +426,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aseprite-mcp", directory = "../aseprite-mcp" },
+    { name = "aseprite-mcp", editable = "../aseprite-mcp" },
     { name = "mcp", extras = ["cli"], specifier = "==1.30.0" },
     { name = "pillow", specifier = "==12.3.0" },
 ]

@@ -1,0 +1,53 @@
+{
+  "name": "Ashguard duelist",
+  "canvas": [96, 80],
+  "anchor": [44, 70],
+  "standing_height": 54,
+  "view": "right-facing three-quarter side view",
+  "design": "Slender adult sword duelist; closed steel visor, petrol blue split coat, ochre scarf, steel chest and shoulder plate, dark trousers and leather boots. One straight one-handed steel sword, bronze crossguard. Original design; no copied game artwork.",
+  "palette": {
+    "outline": "#121522",
+    "dark": "#252839",
+    "neutral": "#393A50",
+    "steel_shadow": "#44566B",
+    "steel": "#768B96",
+    "steel_light": "#A8C2BF",
+    "highlight": "#E6DFBC",
+    "coat_shadow": "#163D4A",
+    "coat": "#226475",
+    "coat_light": "#38918D",
+    "scarf_shadow": "#733C39",
+    "scarf": "#BA6239",
+    "scarf_light": "#E4A34D",
+    "bronze_shadow": "#665343",
+    "bronze": "#B48A58",
+    "bronze_light": "#ECC77E",
+    "skin_shadow": "#8A5B48",
+    "skin": "#C58E65",
+    "skin_light": "#E9BA86",
+    "blade_edge": "#F2E9CF"
+  },
+  "clips": {
+    "idle": {
+      "durations_ms": [120, 120, 120, 120, 120, 120, 120, 120],
+      "loop": true
+    },
+    "walk": {
+      "durations_ms": [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+      "loop": true
+    },
+    "attack": {
+      "durations_ms": [80, 70, 60, 40, 30, 30, 40, 50, 70, 70, 80, 80],
+      "loop": false,
+      "contact_seconds": 0.28,
+      "chain_ready_seconds": 0.54
+    }
+  },
+  "review": {
+    "viewport": [640, 360],
+    "fps": 30,
+    "backgrounds": ["#202333", "#9CA099"],
+    "effects": false
+  },
+  "source_contract": "Aseprite route owns drawn pixel poses and separate editable layers. Blender route owns geometry, rig and animation in .blend; final indexed-palette frames and retouches remain editable in .aseprite. Both preserve tags, durations and ground pivot."
+}
