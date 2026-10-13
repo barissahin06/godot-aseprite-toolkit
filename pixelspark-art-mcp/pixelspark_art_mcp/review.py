@@ -136,7 +136,7 @@ async def review(root: Path, project: Path, godot: str, scene: str, animation: s
 
 
 HTML = '''<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Native asset review</title>
-<style>body{background:#26232b;color:#f5e1bf;font:16px system-ui;margin:24px}img{image-rendering:pixelated;background:#26232b;max-width:none}section{margin:12px;overflow:auto}.pair{display:flex;flex-wrap:wrap}button,input{margin:6px}#views{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}#timeline{white-space:pre-wrap}#frame{width:min(480px,90%)}</style>
+<style>body{background:#26232b;color:#f5e1bf;font:16px system-ui;margin:24px}img{image-rendering:pixelated;background:#26232b;max-width:none}section{margin:12px;overflow:auto;max-width:calc(100% - 24px)}.pair{display:flex;flex-wrap:wrap}button,input{margin:6px}#timeline{white-space:pre-wrap}#frame{width:min(480px,90%)}</style>
 <h1>Native asset review</h1><p id="summary"></p><p>Compare both directions with and without effects. Metrics require visual interpretation.</p>
 <button id="native">Native size</button><button id="zoom">Nearest 3x</button><button id="play">Frame review</button>
 <label>Sample <input id="frame" aria-label="Capture sample" type="range" min="0" value="0" disabled></label><output id="time"></output>

@@ -88,8 +88,8 @@ Before/after frame comparison requires matching viewport, fps, sample count and 
 Old baselines created before time-zero sampling must be regenerated. Baseline and output paths
 must be separate; mismatched settings fail before rendering. Before images are copied into the
 review directory so both versions scrub at the same time without external files.
-Serve the directory locally
-if browser file-fetch restrictions block the comparison JSON. Diagnostics do not approve aesthetics.
+Open `index.html` directly or serve the directory locally. Timing data is embedded in the page;
+no comparison JSON fetch is required. Diagnostics do not approve aesthetics.
 
 Shared locks, bounded processes, checkpoints and verified publication journals are used by both
 packages. Inspect a stale lock PID before removal; incomplete publication is rolled back on the next
